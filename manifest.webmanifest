@@ -1,0 +1,19 @@
+{
+  "name": "D-LOGIS CONTROL 드론 배송 통합관제",
+  "short_name": "D-LOGIS",
+  "description": "드론 배송 주문, 임무, 기체, 배터리, 안전, 배송증빙 통합관제 데모",
+  "lang": "ko-KR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f9fc",
+  "theme_color": "#0b1f3a",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
