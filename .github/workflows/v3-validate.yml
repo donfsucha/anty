@@ -62,7 +62,7 @@ jobs:
           await page.locator('.kpi-grid').waitFor({state:'visible'});
           const count=await page.locator('.kpi').count();
           if(count!==6) throw new Error(`Expected 6 KPI cards, received ${count}`);
-          await page.locator('[data-view="missions"]').click();
+          await page.locator('.nav-btn[data-view="missions"]').click();
           await page.locator('[data-new-mission]').click();
           await page.locator('#mission-form').waitFor({state:'visible'});
           if(errors.length) throw new Error(errors.join('\n'));
