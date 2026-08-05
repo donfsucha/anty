@@ -1,10 +1,11 @@
 'use strict';
 
 /*
- * Modal interaction fix.
- * The modal container stops bubbling, so delegated document handlers did not
- * receive clicks from Close / Mission detail buttons. Handle them in capture
- * phase before the modal stops propagation.
+ * Modal interaction rules.
+ * - Clicking inside the popup never closes it.
+ * - Clicking the dimmed backdrop never closes it.
+ * - Only the top-right X button, the bottom Close button, or the Mission detail
+ *   navigation button can end the popup interaction.
  */
 (function enableModalActions(){
   function modalRoot(){return document.getElementById('modal-root');}
@@ -17,9 +18,9 @@
     const root=modalRoot();
     if(!root||!root.contains(event.target))return;
 
-    /* Mission navigation must run before the generic close action because
-       this button intentionally has both navigation and close attributes. */
-    const missionButton=event.target.closest('[data-select-mission][data-go-missions]');
+    /* Mission navigation must run before close handling because this button
+       intentionally also carries data-modal-close. */
+    const missionButton=event.target.closest('button[data-select-mission][data-go-missions]');
     if(missionButton){
       event.preventDefault();
       event.stopPropagation();
@@ -45,7 +46,9 @@
       return;
     }
 
-    const closeButton=event.target.closest('[data-modal-close]');
+    /* The backdrop also has data-modal-close in legacy markup. Restricting the
+       selector to BUTTON prevents the popup or backdrop from closing on click. */
+    const closeButton=event.target.closest('button[data-modal-close]');
     if(closeButton){
       event.preventDefault();
       event.stopPropagation();
@@ -54,6 +57,7 @@
     }
   },true);
 
+  /* Escape remains available as a keyboard-accessibility close action. */
   document.addEventListener('keydown',event=>{
     if(event.key!=='Escape')return;
     const root=modalRoot();
