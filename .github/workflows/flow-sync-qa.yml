@@ -1,0 +1,49 @@
+name: D-LOGIS Flow Sync QA
+
+on:
+  push:
+    branches:
+      - agent/mission-flow-sync
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: JavaScript syntax
+        run: |
+          set -e
+          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js service-worker.js; do
+            node --check "$file"
+          done
+
+      - name: Required files and references
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('index.html').read_text(encoding='utf-8')
+          refs = re.findall(r'(?:src|href)="\./([^"]+)"', html)
+          missing = [ref for ref in refs if not Path(ref).exists()]
+          if missing:
+              raise SystemExit(f'Missing referenced files: {missing}')
+          required = ['system-consistency.js','data-quality.js','precision-runtime.js','drone-detail-ux.js','system-consistency.css','data-quality.css','drone-detail-ux.css']
+          missing_required = [name for name in required if not Path(name).exists()]
+          if missing_required:
+              raise SystemExit(f'Missing QA files: {missing_required}')
+          print('Static references OK')
+          PY
+
+      - name: Consistency rule presence
+        run: |
+          grep -q "flowOperationalSnapshot" system-consistency.js
+          grep -q "운항 중 드론" system-consistency.js
+          grep -q "mapActiveCount" system-consistency.js
+          grep -q "flowCellDeltaMv" data-quality.js
+          grep -q "grid-template-columns:minmax(0,1fr) minmax(0,1fr)" drone-detail-ux.css
