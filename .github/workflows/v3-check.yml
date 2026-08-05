@@ -1,0 +1,47 @@
+name: Validate D-LOGIS V3
+
+on:
+  push:
+    branches: [v3-operational]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check v3-data.js
+          node --check v3-db.js
+          node --check v3-map.js
+          node --check v3-reports.js
+          node --check v3-views.js
+          node --check v3-app.js
+          node --check service-worker-v3.js
+
+      - name: Validate HTML file references
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('index.html').read_text(encoding='utf-8')
+          refs = re.findall(r'(?:src|href)="\./([^"?#]+)', html)
+          missing = [ref for ref in refs if not Path(ref).exists()]
+          if missing:
+              raise SystemExit('Missing references: ' + ', '.join(missing))
+          print('Validated references:', ', '.join(refs))
+          PY
+
+      - name: Validate required V3 features
+        run: |
+          grep -q "round1" v3-data.js
+          grep -q "exportOperationalWorkbook" v3-reports.js
+          grep -q "카카오맵 무료 쿼터" v3-views.js
+          grep -q "IndexedDB" V3_GUIDE_KO.md
+          grep -q "01_운영요약" v3-reports.js
