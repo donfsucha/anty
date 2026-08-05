@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.3.0-system-consistency';
+const CACHE_NAME = 'dlogis-control-v2.3.1-audit-and-layout';
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS = [
   './flow-sync.css',
   './stagebar-ux.css',
   './system-consistency.css',
+  './data-quality.css',
   './modal-actions-fix.css',
   './drone-detail-ux.css',
   './core.js',
@@ -16,6 +17,8 @@ const ASSETS = [
   './flow-sync-views.js',
   './stagebar-ux.js',
   './system-consistency.js',
+  './data-quality.js',
+  './precision-runtime.js',
   './flow-sync-events.js',
   './drone-detail-ux.js',
   './modal-actions-fix.js',
