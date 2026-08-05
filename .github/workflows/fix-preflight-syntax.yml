@@ -16,24 +16,30 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: agent/mission-flow-sync
-      - name: Close automatic verification blocks
+      - name: Close modal field verification blocks
         run: |
           python3 - <<'PY'
           from pathlib import Path
           path = Path('preflight-verification.js')
           lines = path.read_text(encoding='utf-8').splitlines()
           changed = False
+          in_modal_fields = False
           repaired = []
           for line in lines:
-              if ("if(key==='battery'){" in line or "if(key==='link'){" in line) and not line.rstrip().endswith('}'):
+              if 'function pfModalFields' in line:
+                  in_modal_fields = True
+              if in_modal_fields and ("if(key==='battery'){" in line or "if(key==='link'){" in line) and not line.rstrip().endswith('}'):
                   line = line + '}'
                   changed = True
               repaired.append(line)
+              if 'function pfOpenVerification' in line:
+                  in_modal_fields = False
           if changed:
               path.write_text('\n'.join(repaired) + '\n', encoding='utf-8')
           print('changed=', changed)
           PY
           node --check preflight-verification.js
+          node --check operations-map.js
       - name: Commit repair
         run: |
           if git diff --quiet; then exit 0; fi
