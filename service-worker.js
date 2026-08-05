@@ -1,14 +1,16 @@
-const CACHE_NAME = 'dlogis-control-v2.1.0-flow-sync';
+const CACHE_NAME = 'dlogis-control-v2.2.0-stagebar-ux';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './flow-sync.css',
+  './stagebar-ux.css',
   './core.js',
   './views.js',
   './app.js',
   './flow-sync-core.js',
   './flow-sync-views.js',
+  './stagebar-ux.js',
   './flow-sync-events.js',
   './manifest.webmanifest',
   './app-icon.svg'
