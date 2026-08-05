@@ -31,6 +31,12 @@ async function submitPreflight(){
   await page.locator('#pf-verification-form button[type="submit"]').click();
   await page.locator('#pf-verification-form').waitFor({state:'detached',timeout:8000});
 }
+async function assertSvgRoute(selector,label){
+  const layer=page.locator(selector).first();
+  if(await layer.count()!==1)throw new Error(`${label} SVG layer is missing.`);
+  const points=(await layer.getAttribute('points')||'').trim();
+  if(!points)throw new Error(`${label} SVG layer has no route coordinates.`);
+}
 const testPhoto={name:'evidence.jpg',mimeType:'image/jpeg',buffer:Buffer.from('D-LOGIS evidence image test')};
 
 await page.goto('http://127.0.0.1:5500',{waitUntil:'networkidle'});
@@ -46,7 +52,10 @@ if(initialMissionCount!==initialDroneCount||initialDroneCount!==initialMapCount)
 }
 await page.getByText('전체 화면 데이터 일치',{exact:true}).waitFor();
 await page.locator('.ops-map-shell').waitFor();
-for(const selector of ['.ops-map-planned','.ops-map-flown','.ops-flight-card','.ops-map-legend'])await page.locator(selector).first().waitFor();
+await page.locator('.ops-flight-card').waitFor();
+await page.locator('.ops-map-legend').waitFor();
+await assertSvgRoute('.ops-map-planned','Planned route');
+await assertSvgRoute('.ops-map-flown','Flown route');
 
 /* Run approval and assignment. */
 await openNav('missions','배송임무 관리');
@@ -124,6 +133,8 @@ if(activeMissionCount!==activeDroneCount||activeDroneCount!==activeMapCount){
 }
 if(activeDroneCount<2)throw new Error('Started mission did not increase the active drone count.');
 for(const label of ['항로 편차','잔여 거리','승인','수신'])await page.locator('.ops-flight-card').getByText(label,{exact:true}).waitFor();
+await assertSvgRoute('.ops-map-planned','Updated planned route');
+await assertSvgRoute('.ops-map-flown','Updated flown route');
 
 /* Fleet view must be flight/maintenance centric and visually independent. */
 await openNav('fleet','드론 운항·정비 관리');
