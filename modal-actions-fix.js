@@ -56,14 +56,4 @@
       closeActiveModal();
     }
   },true);
-
-  /* Escape remains available as a keyboard-accessibility close action. */
-  document.addEventListener('keydown',event=>{
-    if(event.key!=='Escape')return;
-    const root=modalRoot();
-    if(root&&root.childElementCount){
-      event.preventDefault();
-      closeActiveModal();
-    }
-  },true);
 })();
