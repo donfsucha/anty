@@ -32,6 +32,7 @@ jobs:
         run: |
           test -f v3/index.html
           test -f v3/styles.css
+          test -f v3/patch.css
           test -f v3/README_KO.md
           grep -q './data.js' v3/index.html
           grep -q './map.js' v3/index.html
@@ -47,14 +48,21 @@ jobs:
           trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
           sleep 2
           curl --fail --silent http://127.0.0.1:5500/ | grep -q 'D-LOGIS CONTROL V3'
-          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --virtual-time-budget=5000 --dump-dom http://127.0.0.1:5500/ > /tmp/dlogis-v3-dom.html 2>/tmp/dlogis-v3-browser.log || true
-          if ! grep -q '관제센터 시작' /tmp/dlogis-v3-dom.html; then
-            echo '--- Browser stderr ---'
-            cat /tmp/dlogis-v3-browser.log || true
-            echo '--- Rendered DOM ---'
-            cat /tmp/dlogis-v3-dom.html || true
-            echo '--- Static server log ---'
+
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --user-data-dir=/tmp/dlogis-welcome --virtual-time-budget=3000 --dump-dom http://127.0.0.1:5500/ > /tmp/dlogis-welcome.html 2>/tmp/dlogis-browser.log || true
+          if ! grep -q '관제센터 시작' /tmp/dlogis-welcome.html; then
+            cat /tmp/dlogis-browser.log || true
+            cat /tmp/dlogis-welcome.html || true
             cat /tmp/dlogis-v3-server.log || true
             exit 1
           fi
-          grep -q '정밀 데이터 기록 기반 드론 배송 통합관제시스템' /tmp/dlogis-v3-dom.html
+          grep -q '정밀 데이터 기록 기반 드론 배송 통합관제시스템' /tmp/dlogis-welcome.html
+
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --user-data-dir=/tmp/dlogis-admin --virtual-time-budget=3000 --dump-dom 'http://127.0.0.1:5500/?role=admin' > /tmp/dlogis-admin.html 2>>/tmp/dlogis-browser.log || true
+          if ! grep -q '드론 배송 통합관제' /tmp/dlogis-admin.html; then
+            cat /tmp/dlogis-browser.log || true
+            cat /tmp/dlogis-admin.html || true
+            exit 1
+          fi
+          grep -q '실시간 운항 지도' /tmp/dlogis-admin.html
+          grep -q '운영보고서 XLSX' /tmp/dlogis-admin.html
