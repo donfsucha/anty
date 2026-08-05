@@ -1,0 +1,68 @@
+name: Validate D-LOGIS V3
+
+on:
+  pull_request:
+    paths:
+      - 'v3/**'
+      - '.github/workflows/v3-check.yml'
+  push:
+    branches:
+      - 'agent/dlogis-v3-operations'
+    paths:
+      - 'v3/**'
+      - '.github/workflows/v3-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: JavaScript syntax
+        run: |
+          node --check v3/data.js
+          node --check v3/map.js
+          node --check v3/reports.js
+          node --check v3/views.js
+          node --check v3/app.js
+          node --check v3/startup.js
+      - name: Required files and references
+        run: |
+          test -f v3/index.html
+          test -f v3/styles.css
+          test -f v3/patch.css
+          test -f v3/README_KO.md
+          grep -q './data.js' v3/index.html
+          grep -q './map.js' v3/index.html
+          grep -q './reports.js' v3/index.html
+          grep -q './views.js' v3/index.html
+          grep -q './app.js' v3/index.html
+          grep -q './startup.js' v3/index.html
+      - name: Static server and browser smoke test
+        run: |
+          cd v3
+          python3 -m http.server 5500 >/tmp/dlogis-v3-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
+          sleep 2
+          curl --fail --silent http://127.0.0.1:5500/ | grep -q 'D-LOGIS CONTROL V3'
+
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --user-data-dir=/tmp/dlogis-welcome --virtual-time-budget=3000 --dump-dom http://127.0.0.1:5500/ > /tmp/dlogis-welcome.html 2>/tmp/dlogis-browser.log || true
+          if ! grep -q '관제센터 시작' /tmp/dlogis-welcome.html; then
+            cat /tmp/dlogis-browser.log || true
+            cat /tmp/dlogis-welcome.html || true
+            cat /tmp/dlogis-v3-server.log || true
+            exit 1
+          fi
+          grep -q '정밀 데이터 기록 기반 드론 배송 통합관제시스템' /tmp/dlogis-welcome.html
+
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --user-data-dir=/tmp/dlogis-admin --virtual-time-budget=3000 --dump-dom 'http://127.0.0.1:5500/?role=admin' > /tmp/dlogis-admin.html 2>>/tmp/dlogis-browser.log || true
+          if ! grep -q '드론 배송 통합관제' /tmp/dlogis-admin.html; then
+            cat /tmp/dlogis-browser.log || true
+            cat /tmp/dlogis-admin.html || true
+            exit 1
+          fi
+          grep -q '실시간 운항 지도' /tmp/dlogis-admin.html
+          grep -q '운영보고서 XLSX' /tmp/dlogis-admin.html
