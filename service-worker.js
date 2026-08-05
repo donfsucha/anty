@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.3.1-audit-and-layout';
+const CACHE_NAME = 'dlogis-control-v2.3.2-view-bindings';
 const ASSETS = [
   './',
   './index.html',
@@ -19,6 +19,7 @@ const ASSETS = [
   './system-consistency.js',
   './data-quality.js',
   './precision-runtime.js',
+  './view-alias-fix.js',
   './flow-sync-events.js',
   './drone-detail-ux.js',
   './modal-actions-fix.js',
