@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.2.2-modal-actions';
+const CACHE_NAME = 'dlogis-control-v2.2.3-explicit-modal-close';
 const ASSETS = [
   './',
   './index.html',
