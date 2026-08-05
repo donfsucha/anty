@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.6.0-inline-live-map';
+const CACHE_NAME = 'dlogis-control-v2.7.0-professional-xlsx';
 const ASSETS = [
   './',
   './index.html',
@@ -13,6 +13,7 @@ const ASSETS = [
   './preflight-verification.css',
   './operations-map.css',
   './inline-live-map.css',
+  './excel-report.css',
   './core.js',
   './views.js',
   './app.js',
@@ -31,6 +32,7 @@ const ASSETS = [
   './flow-sync-events.js',
   './drone-detail-ux.js',
   './modal-actions-fix.js',
+  './excel-report.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
