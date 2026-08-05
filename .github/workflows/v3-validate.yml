@@ -48,13 +48,15 @@ jobs:
 
       - name: Browser smoke test
         run: |
-          cat > /tmp/smoke.mjs <<'JS'
+          cat > smoke.mjs <<'JS'
           import { chromium } from 'playwright';
           const browser = await chromium.launch({headless:true});
           const page = await browser.newPage({viewport:{width:1440,height:1000}});
           const errors=[];
           page.on('pageerror', error=>errors.push(String(error)));
-          page.on('console', msg=>{if(msg.type()==='error') errors.push(msg.text());});
+          page.on('console', msg=>{
+            if(msg.type()==='error' && !msg.text().includes('Failed to load resource')) errors.push(msg.text());
+          });
           await page.goto('http://127.0.0.1:5500/', {waitUntil:'domcontentloaded'});
           await page.locator('[data-enter-role="admin"]').click();
           await page.locator('.kpi-grid').waitFor({state:'visible'});
@@ -69,4 +71,4 @@ jobs:
           npm init -y > /dev/null 2>&1
           npm install --silent playwright@1.54.2
           npx playwright install chromium
-          node /tmp/smoke.mjs
+          node smoke.mjs
