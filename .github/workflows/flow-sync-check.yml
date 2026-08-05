@@ -1,0 +1,33 @@
+name: Validate connected mission flow
+
+on:
+  push:
+    branches:
+      - agent/mission-flow-sync
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: JavaScript syntax check
+        run: |
+          node --check core.js
+          node --check views.js
+          node --check app.js
+          node --check flow-sync-core.js
+          node --check flow-sync-views.js
+          node --check flow-sync-events.js
+          node --check service-worker.js
+      - name: Required file check
+        run: |
+          test -f index.html
+          test -f flow-sync.css
+          grep -q 'flow-sync-core.js' index.html
+          grep -q 'flow-sync-views.js' index.html
+          grep -q 'flow-sync-events.js' index.html
