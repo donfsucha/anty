@@ -1,0 +1,17 @@
+{
+  "name": "D-LOGIS CONTROL V3",
+  "short_name": "D-LOGIS V3",
+  "description": "드론 배송 통합관제·운영기록 시스템",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#071b36",
+  "icons": [
+    {
+      "src": "./app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
