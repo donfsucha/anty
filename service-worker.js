@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.5.0-verified-preflight-map';
+const CACHE_NAME = 'dlogis-control-v2.6.0-inline-live-map';
 const ASSETS = [
   './',
   './index.html',
@@ -12,6 +12,7 @@ const ASSETS = [
   './asset-visuals.css',
   './preflight-verification.css',
   './operations-map.css',
+  './inline-live-map.css',
   './core.js',
   './views.js',
   './app.js',
@@ -26,6 +27,7 @@ const ASSETS = [
   './asset-visuals.js',
   './preflight-verification.js',
   './operations-map.js',
+  './inline-live-map.js',
   './flow-sync-events.js',
   './drone-detail-ux.js',
   './modal-actions-fix.js',
