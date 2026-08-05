@@ -19,7 +19,7 @@ jobs:
       - name: JavaScript syntax
         run: |
           set -e
-          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js service-worker.js; do
+          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js service-worker.js; do
             node --check "$file"
           done
 
@@ -33,14 +33,14 @@ jobs:
           missing = [ref for ref in refs if not Path(ref).exists()]
           if missing:
               raise SystemExit(f'Missing referenced files: {missing}')
-          required = ['system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','drone-detail-ux.css']
+          required = ['system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','inline-live-map.js','excel-report.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','excel-report.css','drone-detail-ux.css']
           missing_required = [name for name in required if not Path(name).exists()]
           if missing_required:
               raise SystemExit(f'Missing QA files: {missing_required}')
           print('Static references OK')
           PY
 
-      - name: Consistency, verification and map rules
+      - name: Consistency, verification, map and Excel rules
         run: |
           grep -q "flowOperationalSnapshot" system-consistency.js
           grep -q "운항 중 드론" system-consistency.js
@@ -55,6 +55,13 @@ jobs:
           grep -q "APPROVAL_REFERENCE" preflight-verification.js
           grep -q "ops-map-planned" operations-map.js
           grep -q "항로 편차" operations-map.js
+          grep -q "inline-live-map" inline-live-map.js
+          grep -q "ExcelJS" excel-report.js
+          grep -q "00_운영요약" excel-report.js
+          grep -q "03_비행전검증" excel-report.js
+          grep -q "yyyy-mm-dd hh:mm:ss" excel-report.js
+          grep -q "PERCENT_FORMAT='0.0" excel-report.js
+          grep -q "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" excel-report.js
           grep -q "fleet-command-hero" asset-visuals.css
           grep -q "energy-command-hero" asset-visuals.css
           grep -q "pf-item" preflight-verification.css
