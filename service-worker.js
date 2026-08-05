@@ -1,10 +1,11 @@
-const CACHE_NAME = 'dlogis-control-v2.2.1-stage-sequence';
+const CACHE_NAME = 'dlogis-control-v2.2.2-modal-actions';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './flow-sync.css',
   './stagebar-ux.css',
+  './modal-actions-fix.css',
   './core.js',
   './views.js',
   './app.js',
@@ -13,6 +14,7 @@ const ASSETS = [
   './flow-sync-views.js',
   './stagebar-ux.js',
   './flow-sync-events.js',
+  './modal-actions-fix.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
