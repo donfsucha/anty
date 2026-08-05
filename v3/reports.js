@@ -1,6 +1,17 @@
+let xlsxLoadPromise=null;
 async function ensureXLSX(){
   if(window.XLSX)return window.XLSX;
-  throw new Error('Excel 모듈을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.');
+  if(xlsxLoadPromise)return xlsxLoadPromise;
+  xlsxLoadPromise=new Promise((resolve,reject)=>{
+    const script=document.createElement('script');
+    script.id='sheetjs-xlsx';
+    script.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+    script.async=true;
+    script.onload=()=>window.XLSX?resolve(window.XLSX):reject(new Error('Excel 모듈 초기화 실패'));
+    script.onerror=()=>reject(new Error('Excel 모듈 다운로드 실패'));
+    document.head.appendChild(script);
+  }).catch(error=>{xlsxLoadPromise=null;document.getElementById('sheetjs-xlsx')?.remove();throw error;});
+  return xlsxLoadPromise;
 }
 function excelTime(value){return value?fmtKST(value,true):'';}
 function makeSheet(XLSX,rows,widths=[]){
@@ -16,7 +27,7 @@ function makeSheet(XLSX,rows,widths=[]){
 }
 function applyFormats(XLSX,ws,headers){
   if(!ws['!ref'])return;
-  const oneDecimal=new Set(['거리(km)','중량(kg)','진행률(%)','수신지연(ms)','고도(m)','지상속도(km/h)','방위(°)','배터리SOC(%)','배터리온도(℃)','통신품질(%)','GNSS위성수','현재값','기준값','SOC(%)','SOH(%)','온도(℃)','셀편차(mV)','사이클(회)','최저온도(℃)','최고온도(℃)','데이터 신선도(초)','명령 적용시간(ms)']);
+  const oneDecimal=new Set(['거리(km)','중량(kg)','진행률(%)','수신지연(ms)','고도(m)','지상속도(km/h)','방위(°)','배터리SOC(%)','배터리온도(℃)','통신품질(%)','GNSS위성수','현재값','기준값','SOC(%)','SOH(%)','온도(℃)','셀편차(mV)','사이클(회)','최저온도(℃)','최고온도(℃)','데이터 신선도(초)','명령 적용시간(ms)','정비잔여(h)']);
   const range=XLSX.utils.decode_range(ws['!ref']);
   headers.forEach((header,column)=>{
     if(!oneDecimal.has(header))return;
@@ -95,8 +106,10 @@ async function exportOperationalWorkbook(){
     const auditRows=[...state.auditLogs,...audits.filter(x=>!state.auditLogs.some(a=>a.id===x.id))].map(a=>({
       '감사ID':a.id,'발생시각(KST)':excelTime(a.occurredAt),'사용자':a.actor,'행동':a.action,'대상유형':a.targetType,'대상ID':a.targetId,'상세내용':a.detail,'데이터출처':a.source||'MANUAL'
     }));
-    const currentAssets=[...state.drones.map(d=>({'구분':'드론','자산ID':d.id,'자산명':d.name,'상태':d.status,'SOC(%)':round1(batteryById(d.batteryId)?.soc||0),'SOH(%)':round1(batteryById(d.batteryId)?.soh||0),'온도(℃)':round1(batteryById(d.batteryId)?.temperatureC||0),'통신품질(%)':round1(d.linkQualityPct),'정비잔여(h)':round1(d.maintenanceDueHours),'최종확인시각(KST)':excelTime(state.meta.lastDataAt)})),...state.batteries.map(b=>({'구분':'배터리','자산ID':b.id,'자산명':b.droneId?`${b.droneId} 장착`:'보관 랙','상태':b.status,'SOC(%)':round1(b.soc),'SOH(%)':round1(b.soh),'온도(℃)':round1(b.temperatureC),'통신품질(%)':'','정비잔여(h)':'','최종확인시각(KST)':excelTime(b.lastInspectionAt)}))];
-
+    const currentAssets=[
+      ...state.drones.map(d=>({'구분':'드론','자산ID':d.id,'자산명':d.name,'상태':d.status,'SOC(%)':round1(batteryById(d.batteryId)?.soc||0),'SOH(%)':round1(batteryById(d.batteryId)?.soh||0),'온도(℃)':round1(batteryById(d.batteryId)?.temperatureC||0),'통신품질(%)':round1(d.linkQualityPct),'정비잔여(h)':round1(d.maintenanceDueHours),'최종확인시각(KST)':excelTime(state.meta.lastDataAt)})),
+      ...state.batteries.map(b=>({'구분':'배터리','자산ID':b.id,'자산명':b.droneId?`${b.droneId} 장착`:'보관 랙','상태':b.status,'SOC(%)':round1(b.soc),'SOH(%)':round1(b.soh),'온도(℃)':round1(b.temperatureC),'통신품질(%)':'','정비잔여(h)':'','최종확인시각(KST)':excelTime(b.lastInspectionAt)}))
+    ];
     const definitions=[
       ['01_운영요약',summary,[28,30,12,48]],['02_임무목록',missionRows,[20,18,28,12,11,22,22,12,22,11,12,12,12,15,12,22,22,22,22,22,10]],
       ['03_비행로그',telemetryRows,[20,20,12,12,22,22,14,18,18,11,17,11,16,16,14,12,13,9,13]],
@@ -104,18 +117,14 @@ async function exportOperationalWorkbook(){
       ['06_배터리기록',batteryRows,[20,22,20,12,12,10,10,10,12,12,12,13]],['07_배송증빙',proofRows,[20,20,18,15,20,10,22,22,18,18,25,22,13,13]],
       ['08_비행전점검',checkRows,[20,20,13,24,10,12,22,30,13]],['09_감사로그',auditRows,[20,22,14,18,13,20,50,13]],['10_자산현황',currentAssets,[10,14,20,14,11,11,11,14,14,22]]
     ];
-    definitions.forEach(([name,rows,widths])=>{
-      const ws=makeSheet(XLSX,rows,widths);applyFormats(XLSX,ws,Object.keys(rows[0]||{}));XLSX.utils.book_append_sheet(wb,ws,name);
-    });
-    const date=new Intl.DateTimeFormat('sv-SE',{timeZone:TIME_ZONE}).format(new Date()).replaceAll('-','');
-    const time=fmtTime(generatedAt,true).replaceAll(':','');
+    definitions.forEach(([name,rows,widths])=>{const ws=makeSheet(XLSX,rows,widths);applyFormats(XLSX,ws,Object.keys(rows[0]||{}));XLSX.utils.book_append_sheet(wb,ws,name);});
+    const date=new Intl.DateTimeFormat('sv-SE',{timeZone:TIME_ZONE}).format(new Date()).replaceAll('-',''),time=fmtTime(generatedAt,true).replaceAll(':','');
     XLSX.writeFile(wb,`DLOGIS_운영보고서_${date}_${time}.xlsx`,{compression:true,bookSST:true});
     toast('운영보고서 저장 완료',`${definitions.length}개 시트에 현재 수치와 정확한 KST 시각을 저장했습니다.`,'success');
   }catch(error){console.error(error);toast('Excel 생성 실패',error.message,'error');}
 }
 async function exportJsonBackup(){
-  const logs=await DLogisDB.all();const payload={exportedAt:nowIso(),state,logs};
-  const url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'}));
-  const a=document.createElement('a');a.href=url;a.download=`DLOGIS_backup_${Date.now()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),500);
+  const logs=await DLogisDB.all(),payload={exportedAt:nowIso(),state,logs},url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'}));
+  const link=document.createElement('a');link.href=url;link.download=`DLOGIS_backup_${Date.now()}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),500);
   toast('JSON 백업 완료','상태와 정밀 로그 전체를 저장했습니다.','success');
 }
