@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.2.4-button-only-modal-close';
+const CACHE_NAME = 'dlogis-control-v2.2.5-drone-detail-data';
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS = [
   './flow-sync.css',
   './stagebar-ux.css',
   './modal-actions-fix.css',
+  './drone-detail-ux.css',
   './core.js',
   './views.js',
   './app.js',
@@ -14,6 +15,7 @@ const ASSETS = [
   './flow-sync-views.js',
   './stagebar-ux.js',
   './flow-sync-events.js',
+  './drone-detail-ux.js',
   './modal-actions-fix.js',
   './manifest.webmanifest',
   './app-icon.svg'
