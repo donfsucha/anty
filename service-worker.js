@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.2.0-stagebar-ux';
+const CACHE_NAME = 'dlogis-control-v2.2.1-stage-sequence';
 const ASSETS = [
   './',
   './index.html',
@@ -9,6 +9,7 @@ const ASSETS = [
   './views.js',
   './app.js',
   './flow-sync-core.js',
+  './stage-sequence-fix.js',
   './flow-sync-views.js',
   './stagebar-ux.js',
   './flow-sync-events.js',
