@@ -1,0 +1,72 @@
+name: Validate D-LOGIS V3
+
+on:
+  push:
+    branches: [dlogis-v3-operations]
+    paths:
+      - 'v3/**'
+      - '.github/workflows/v3-validate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: JavaScript syntax checks
+        run: |
+          node --check v3/data.js
+          node --check v3/map.js
+          node --check v3/reports.js
+          node --check v3/app.js
+          node --check v3/service-worker.js
+
+      - name: Validate application files
+        run: |
+          test -f v3/index.html
+          test -f v3/styles.css
+          test -f v3/manifest.webmanifest
+          python3 -m json.tool v3/manifest.webmanifest > /dev/null
+          grep -q './data.js' v3/index.html
+          grep -q './app.js' v3/index.html
+          grep -q 'D-LOGIS CONTROL V3' v3/index.html
+
+      - name: Start local static server
+        run: |
+          python3 -m http.server 5500 --directory v3 > /tmp/dlogis-v3-server.log 2>&1 &
+          echo $! > /tmp/dlogis-v3-server.pid
+          sleep 2
+          curl --fail --silent --show-error http://127.0.0.1:5500/ > /tmp/index.html
+          curl --fail --silent --show-error http://127.0.0.1:5500/data.js > /dev/null
+          curl --fail --silent --show-error http://127.0.0.1:5500/app.js > /dev/null
+          grep -q 'D-LOGIS CONTROL V3' /tmp/index.html
+
+      - name: Browser smoke test
+        run: |
+          cat > /tmp/smoke.mjs <<'JS'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch({headless:true});
+          const page = await browser.newPage({viewport:{width:1440,height:1000}});
+          const errors=[];
+          page.on('pageerror', error=>errors.push(String(error)));
+          page.on('console', msg=>{if(msg.type()==='error') errors.push(msg.text());});
+          await page.goto('http://127.0.0.1:5500/', {waitUntil:'domcontentloaded'});
+          await page.locator('[data-enter-role="admin"]').click();
+          await page.locator('.kpi-grid').waitFor({state:'visible'});
+          const count=await page.locator('.kpi').count();
+          if(count!==6) throw new Error(`Expected 6 KPI cards, received ${count}`);
+          await page.locator('[data-view="missions"]').click();
+          await page.locator('[data-new-mission]').click();
+          await page.locator('#mission-form').waitFor({state:'visible'});
+          if(errors.length) throw new Error(errors.join('\n'));
+          await browser.close();
+          JS
+          npm init -y > /dev/null 2>&1
+          npm install --silent playwright@1.54.2
+          npx playwright install chromium
+          node /tmp/smoke.mjs
