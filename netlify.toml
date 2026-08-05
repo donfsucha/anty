@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(self)"
+
+[[headers]]
+  for = "/service-worker-v3.js"
+  [headers.values]
+    Cache-Control = "no-cache"
