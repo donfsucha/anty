@@ -132,7 +132,10 @@ if(activeMissionCount!==activeDroneCount||activeDroneCount!==activeMapCount){
   throw new Error(`Post-start mismatch: missions=${activeMissionCount}, drones=${activeDroneCount}, map=${activeMapCount}`);
 }
 if(activeDroneCount<2)throw new Error('Started mission did not increase the active drone count.');
-for(const label of ['항로 편차','잔여 거리','승인','수신'])await page.locator('.ops-flight-card').getByText(label,{exact:true}).waitFor();
+const flightCardText=await page.locator('.ops-flight-card').innerText();
+for(const label of ['항로 편차','잔여 거리','승인','수신']){
+  if(!flightCardText.includes(label))throw new Error(`Operational map detail missing: ${label}`);
+}
 await assertSvgRoute('.ops-map-planned','Updated planned route');
 await assertSvgRoute('.ops-map-flown','Updated flown route');
 
