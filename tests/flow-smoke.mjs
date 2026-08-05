@@ -66,9 +66,17 @@ if(activeMissionCount!==activeDroneCount||activeDroneCount!==activeMapCount){
 }
 if(activeDroneCount<2)throw new Error('Started mission did not increase the active drone count.');
 
-/* Fleet popup must be visually separated and close only by explicit buttons. */
-await openNav('fleet','드론 관리');
-await page.locator('[data-select-drone="DR-001"]').click();
+/* Fleet view must be flight/maintenance centric and visually independent. */
+await openNav('fleet','드론 운항·정비 관리');
+await page.locator('.fleet-command-hero').waitFor();
+if(await page.locator('.fleet-aircraft-card').count()!==4)throw new Error('Fleet card count does not match registered drones.');
+const aircraftCard=page.locator('.fleet-aircraft-card[data-aircraft-id="DR-001"]');
+await aircraftCard.waitFor();
+const aircraftText=await aircraftCard.innerText();
+for(const label of ['LIVE TELEMETRY','ASSET READINESS','WGS84 위치','정비 잔여','연결 임무']){
+  if(!aircraftText.includes(label))throw new Error(`Fleet information missing: ${label}`);
+}
+await aircraftCard.locator('[data-select-drone="DR-001"]').click();
 await page.locator('.drone-detail-modal').waitFor();
 await page.locator('.flight-status-section').waitFor();
 await page.locator('.energy-status-section').waitFor();
@@ -78,11 +86,25 @@ if(!await page.locator('.drone-detail-modal').isVisible())throw new Error('Popup
 await page.locator('.drone-detail-foot [data-modal-close]').click();
 await page.locator('.drone-detail-modal').waitFor({state:'detached'});
 
-/* Battery precision is displayed in mV while other operational values use one decimal. */
-await openNav('batteries','스마트배터리');
-const bat1=page.locator('.entity').filter({hasText:'BAT-001'}).first();
+/* Battery view must use a separate energy/health visual language. */
+await openNav('batteries','배터리 에너지·건전성 관리');
+await page.locator('.energy-command-hero').waitFor();
+if(await page.locator('.energy-battery-card').count()!==6)throw new Error('Battery card count does not match registered batteries.');
+if(await page.locator('.fleet-aircraft-card').count()!==0)throw new Error('Fleet card layout leaked into the battery page.');
+const bat1=page.locator('.energy-battery-card[data-battery-id="BAT-001"]');
 await bat1.waitFor();
-if(!/18\.0mV/.test(await bat1.innerText()))throw new Error('Battery cell delta precision was lost.');
+const batteryText=await bat1.innerText();
+for(const label of ['SOC','SOH','셀 편차','충방전 사이클','예상 잔여비행','연결 임무']){
+  if(!batteryText.includes(label))throw new Error(`Battery information missing: ${label}`);
+}
+if(!/18\.0mV/.test(batteryText))throw new Error('Battery cell delta precision was lost.');
+await bat1.locator('[data-battery-detail="BAT-001"]').click();
+await page.locator('.battery-detail-modal').waitFor();
+for(const heading of ['에너지 상태','건전성·셀 균형','기체·임무 연결','데이터 신뢰성']){
+  await page.getByText(heading,{exact:true}).waitFor();
+}
+await page.locator('.battery-detail-foot [data-modal-close]').click();
+await page.locator('.battery-detail-modal').waitFor({state:'detached'});
 
 /* Visit every major admin page and verify that it renders without runtime errors. */
 await openNav('safety','안전경보 센터');
@@ -92,10 +114,10 @@ await page.getByText('임무 완료율',{exact:true}).waitFor();
 await openNav('connection','기체 연결 설정');
 
 const bodyText=await page.locator('body').innerText();
-if(/\d+\.\d{2,}(?=%|m\b|km\/h|℃|h\b|분|건|대|개)/.test(bodyText)){
+if(/\d+\.\d{2,}(?=%|m\b|km\/h|℃|h\b|분|건|대|개|mV)/.test(bodyText)){
   throw new Error('An operational value is displayed with more than one decimal place.');
 }
 if(errors.length)throw new Error(errors.join('\n'));
 
-console.log('D-LOGIS cross-page consistency smoke test passed.');
+console.log('D-LOGIS asset visual and cross-page consistency smoke test passed.');
 await browser.close();
