@@ -1,10 +1,11 @@
-const CACHE_NAME = 'dlogis-control-v2.2.5-drone-detail-data';
+const CACHE_NAME = 'dlogis-control-v2.3.0-system-consistency';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './flow-sync.css',
   './stagebar-ux.css',
+  './system-consistency.css',
   './modal-actions-fix.css',
   './drone-detail-ux.css',
   './core.js',
@@ -14,6 +15,7 @@ const ASSETS = [
   './stage-sequence-fix.js',
   './flow-sync-views.js',
   './stagebar-ux.js',
+  './system-consistency.js',
   './flow-sync-events.js',
   './drone-detail-ux.js',
   './modal-actions-fix.js',
