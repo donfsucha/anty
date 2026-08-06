@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.7.0-professional-xlsx';
+const CACHE_NAME = 'dlogis-control-v2.8.0-two-mode-responsive';
 const ASSETS = [
   './',
   './index.html',
@@ -14,6 +14,7 @@ const ASSETS = [
   './operations-map.css',
   './inline-live-map.css',
   './excel-report.css',
+  './responsive-layout.css',
   './core.js',
   './views.js',
   './app.js',
