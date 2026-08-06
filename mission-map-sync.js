@@ -9,7 +9,7 @@
  * one final canonical snapshot and a direct "track on map" action.
  */
 (function installMissionMapSynchronization(){
-  const VERSION='1.0.1';
+  const VERSION='1.0.2';
   const MAP_ACTIVE_STATUSES=new Set(['IN_FLIGHT','HOLDING','DELIVERED','RETURNING','LANDING']);
   const MAP_ACTIONS=new Set(['START','HOLD','RESUME','RTH','DELIVER','COMPLETE']);
   const STATUS_TO_DRONE={IN_FLIGHT:'IN_FLIGHT',HOLDING:'HOLDING',DELIVERED:'RETURNING',RETURNING:'RETURNING',LANDING:'LANDING'};
@@ -58,7 +58,7 @@
       battery.reservedMissionId=null;
       drone.battery=typeof flowRound1==='function'?flowRound1(battery.soc):Math.round(Number(battery.soc||0)*10)/10;
     }
-    return {mission,drone,battery: battery||null};
+    return {mission,drone,battery:battery||null};
   }
 
   function uniqueById(rows){return [...new Map(rows.filter(Boolean).map(item=>[item.id,item])).values()];}
@@ -101,6 +101,17 @@
 
   function requestDashboardRender(){
     if(state.view!=='dashboard'||renderQueued)return;
+    const ui=uiState();
+    const liveContainer=document.getElementById('ops-inline-live-map');
+    if(ui.inlineMapMode==='live'&&liveContainer?.isConnected){
+      /*
+       * Do not replace a mounted Leaflet container. The existing one-second
+       * telemetry loop reads synchronizedSnapshot() and updates its layers in
+       * place. Replacing the node here caused Leaflet's _leaflet_pos race and
+       * left a flying mission without a visible marker.
+       */
+      return;
+    }
     renderQueued=true;
     queueMicrotask(()=>{
       renderQueued=false;
