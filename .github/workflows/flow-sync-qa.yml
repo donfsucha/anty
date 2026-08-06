@@ -19,7 +19,7 @@ jobs:
       - name: JavaScript syntax
         run: |
           set -e
-          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js service-worker.js; do
+          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js service-worker.js; do
             node --check "$file"
           done
 
@@ -33,7 +33,7 @@ jobs:
           missing = [ref for ref in refs if not Path(ref).exists()]
           if missing:
               raise SystemExit(f'Missing referenced files: {missing}')
-          required = ['system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','inline-live-map.js','excel-report.js','agency-report.js','layout-optimizer.js','report-observer-guard.js','report-observer-release.js','button-stability.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','excel-report.css','agency-report.css','responsive-layout.css','workspace-layout.css','drone-detail-ux.css']
+          required = ['system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','inline-live-map.js','excel-report.js','agency-report.js','unified-report-mode.js','layout-optimizer.js','report-observer-guard.js','report-observer-release.js','button-stability.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','excel-report.css','agency-report.css','responsive-layout.css','workspace-layout.css','drone-detail-ux.css']
           missing_required = [name for name in required if not Path(name).exists()]
           if missing_required:
               raise SystemExit(f'Missing QA files: {missing_required}')
@@ -58,15 +58,18 @@ jobs:
           grep -q "inline-live-map" inline-live-map.js
           grep -q "ExcelJS" excel-report.js
           grep -q "기관보고서 Excel" agency-report.js
-          grep -q "배송증빙 Excel" agency-report.js
-          grep -q "운영리포트 Excel" agency-report.js
           grep -q "01_임무별_종합" agency-report.js
           grep -q "02_운항안전_요약" agency-report.js
           grep -q "03_검증승인_요약" agency-report.js
           grep -q "04_배송증빙" agency-report.js
+          grep -q "종합보고서 Excel" unified-report-mode.js
+          grep -q "DLOGIS_종합보고서" unified-report-mode.js
+          grep -q "REPORT_SELECTOR" unified-report-mode.js
+          grep -q "xlsx" tests/excel-report-smoke.mjs
           grep -q "Raw telemetry" tests/excel-report-smoke.mjs
           grep -q "yyyy-mm-dd hh:mm:ss" agency-report.js
           grep -q "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" agency-report.js
+          grep -q "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" unified-report-mode.js
           grep -q "isDocumentWideButtonObserver" report-observer-guard.js
           grep -q "__dlogisNativeMutationObserver" report-observer-release.js
           grep -q "button:not(\[type\])" button-stability.js
