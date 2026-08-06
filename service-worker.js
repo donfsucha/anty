@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.1.0-unified-report';
+const CACHE_NAME = 'dlogis-control-v3.1.1-unified-report-cleanup';
 const ASSETS = [
   './',
   './index.html',
