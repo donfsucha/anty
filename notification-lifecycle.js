@@ -2,17 +2,20 @@
 
 /*
  * Operation notification lifecycle.
- * Completed operation docks previously remained on screen because every render
- * recreated the latest completed operation. This layer gives each dock an
- * absolute expiry, a manual close control, and a persisted dismissed state.
+ * Completed operation messages close automatically, but the countdown pauses
+ * while the user is hovering, touching, or focusing the message controls.
  */
 (function installNotificationLifecycle(){
-  const VERSION='1.0.0';
-  const SUCCESS_VISIBLE_MS=4600;
-  const ERROR_VISIBLE_MS=8500;
+  const VERSION='1.1.0';
+  const SUCCESS_VISIBLE_MS=12000;
+  const ERROR_VISIBLE_MS=18000;
+  const MIN_RESUME_MS=4500;
   let dismissTimer=null;
   let scheduledOperationId=null;
   let scheduledDeadline=0;
+  let pausedOperationId=null;
+  const deadlineByOperation=new Map();
+  const remainingByOperation=new Map();
 
   const originalMount=flowMountOperationCenter;
 
@@ -39,11 +42,17 @@
     return operation?.status==='ERROR'?ERROR_VISIBLE_MS:SUCCESS_VISIBLE_MS;
   }
 
-  function operationDeadline(operation){
+  function initialDeadline(operation){
     const completed=Date.parse(operation?.completedAt||'');
     const requested=Date.parse(operation?.requestedAt||'');
     const base=Number.isFinite(completed)?completed:Number.isFinite(requested)?requested:Date.now();
     return base+visibleDuration(operation);
+  }
+
+  function operationDeadline(operation){
+    if(!operation)return 0;
+    if(!deadlineByOperation.has(operation.id))deadlineByOperation.set(operation.id,initialDeadline(operation));
+    return deadlineByOperation.get(operation.id);
   }
 
   function clearDismissTimer(){
@@ -65,6 +74,9 @@
   function dismissOperation(operationId,{animate=true}={}){
     if(!operationId)return;
     clearDismissTimer();
+    pausedOperationId=null;
+    remainingByOperation.delete(operationId);
+    deadlineByOperation.delete(operationId);
     const ui=ensureUiState();
     ui.operationOpen=false;
     if(ui.operationId===operationId)ui.operationId=null;
@@ -80,8 +92,46 @@
     return ui.dismissedOperationId===operation.id||Date.now()>=operationDeadline(operation);
   }
 
+  function updateAutoCloseLabel(operationId,paused=false){
+    const dock=document.querySelector(`#flow-operation-dock[data-operation-dock="${CSS.escape(operationId)}"]`);
+    if(!dock)return;
+    dock.classList.toggle('notification-paused',paused);
+    const label=dock.querySelector('.operation-dock-autoclose');
+    if(!label)return;
+    if(paused){
+      label.textContent='자동 닫힘 일시정지 · 버튼을 눌러 확인하세요.';
+      return;
+    }
+    const operation=operationById(operationId);
+    const seconds=Math.max(1,Math.ceil((operationDeadline(operation)-Date.now())/1000));
+    label.textContent=`약 ${seconds}초 후 자동으로 닫힙니다.`;
+  }
+
+  function pauseDismiss(operationId){
+    const operation=operationById(operationId);
+    if(!operation||operation.status==='PROCESSING')return;
+    const remaining=Math.max(MIN_RESUME_MS,operationDeadline(operation)-Date.now());
+    remainingByOperation.set(operationId,remaining);
+    pausedOperationId=operationId;
+    clearDismissTimer();
+    updateAutoCloseLabel(operationId,true);
+  }
+
+  function resumeDismiss(operationId){
+    if(pausedOperationId!==operationId)return;
+    const operation=operationById(operationId);
+    pausedOperationId=null;
+    if(!operation||operation.status==='PROCESSING'||ensureUiState().operationOpen)return;
+    const remaining=Math.max(MIN_RESUME_MS,remainingByOperation.get(operationId)||MIN_RESUME_MS);
+    deadlineByOperation.set(operationId,Date.now()+remaining);
+    remainingByOperation.delete(operationId);
+    updateAutoCloseLabel(operationId,false);
+    scheduleDismiss(operation);
+  }
+
   function decorateDock(dock,operation){
-    if(!dock||dock.dataset.lifecycleManaged==='true')return dock;
+    if(!dock)return null;
+    if(dock.dataset.lifecycleManaged==='true')return dock;
     const content=dock.innerHTML;
     const managed=document.createElement('div');
     managed.id='flow-operation-dock';
@@ -90,13 +140,23 @@
     managed.dataset.lifecycleManaged='true';
     managed.setAttribute('role','status');
     managed.setAttribute('aria-live','polite');
-    managed.innerHTML=`<button type="button" class="operation-dock-main" data-operation-open aria-label="${escapeHtml(operation.title)} 상세 열기">${content}<span class="operation-dock-autoclose">잠시 후 자동으로 닫힙니다.</span></button><button type="button" class="operation-dock-dismiss" data-operation-dismiss="${operation.id}" aria-label="알림 닫기">×</button>`;
+    managed.innerHTML=`<button type="button" class="operation-dock-main" data-operation-open aria-label="${escapeHtml(operation.title)} 상세 열기">${content}<span class="operation-dock-autoclose"></span></button><button type="button" class="operation-dock-dismiss" data-operation-dismiss="${operation.id}" aria-label="알림 닫기">×</button>`;
     dock.replaceWith(managed);
+
+    managed.addEventListener('pointerenter',()=>pauseDismiss(operation.id));
+    managed.addEventListener('pointerleave',()=>resumeDismiss(operation.id));
+    managed.addEventListener('pointerdown',()=>pauseDismiss(operation.id),{passive:true});
+    managed.addEventListener('focusin',()=>pauseDismiss(operation.id));
+    managed.addEventListener('focusout',()=>setTimeout(()=>{
+      if(!managed.contains(document.activeElement))resumeDismiss(operation.id);
+    },0));
+
+    updateAutoCloseLabel(operation.id,false);
     return managed;
   }
 
   function scheduleDismiss(operation){
-    if(!operation||operation.status==='PROCESSING'||ensureUiState().operationOpen)return;
+    if(!operation||operation.status==='PROCESSING'||ensureUiState().operationOpen||pausedOperationId===operation.id)return;
     const deadline=operationDeadline(operation);
     const remaining=deadline-Date.now();
     if(remaining<=0){dismissOperation(operation.id,{animate:false});return;}
@@ -106,7 +166,7 @@
     scheduledDeadline=deadline;
     dismissTimer=setTimeout(()=>{
       const ui=ensureUiState();
-      if(ui.operationOpen||ui.operationId!==operation.id)return;
+      if(ui.operationOpen||ui.operationId!==operation.id||pausedOperationId===operation.id)return;
       dismissOperation(operation.id);
     },remaining);
   }
@@ -163,6 +223,8 @@
   window.dlogisNotificationLifecycle={
     version:VERSION,
     dismissOperation,
+    pauseDismiss,
+    resumeDismiss,
     clearDismissTimer
   };
 
