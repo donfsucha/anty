@@ -1,0 +1,114 @@
+/* Distinct visual systems for flight assets and smart batteries */
+:root{
+  --fleet-950:#061b38;--fleet-900:#0b2a52;--fleet-700:#155dbe;--fleet-500:#3a82f7;--fleet-100:#dceaff;--fleet-50:#f1f6ff;
+  --energy-950:#063b37;--energy-800:#075d55;--energy-600:#0c927f;--energy-400:#38c6a8;--energy-100:#c8f2e8;--energy-50:#effbf8;
+  --energy-amber:#d97706;--energy-red:#d92d20;
+}
+.asset-eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:.56rem;font-weight:850;letter-spacing:.13em;color:#8ebcff}
+.asset-eyebrow::before{content:"";width:20px;height:2px;border-radius:99px;background:currentColor}
+
+/* Fleet command hero */
+.fleet-command-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:22px;align-items:center;overflow:hidden;margin-bottom:17px;padding:22px 24px;border-radius:18px;background:radial-gradient(circle at 85% 28%,rgba(65,139,242,.24),transparent 32%),linear-gradient(135deg,var(--fleet-950),var(--fleet-900) 62%,#124b86);color:#fff;box-shadow:0 16px 34px rgba(8,34,70,.16)}
+.fleet-command-hero::after{content:"";position:absolute;inset:auto -10% -70px 38%;height:140px;border:1px solid rgba(255,255,255,.08);border-radius:50%;transform:rotate(-7deg)}
+.fleet-hero-copy{position:relative;z-index:2}
+.fleet-hero-copy h2{margin:8px 0 7px;font-size:1.05rem;letter-spacing:-.025em}
+.fleet-hero-copy p{margin:0;color:#bfd2e8;font-size:.64rem;line-height:1.6;max-width:700px}
+.fleet-hero-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:18px}
+.fleet-hero-stats>div{padding:10px 11px;border:1px solid rgba(255,255,255,.12);border-radius:11px;background:rgba(255,255,255,.07);backdrop-filter:blur(6px)}
+.fleet-hero-stats span{display:block;color:#9db9d6;font-size:.5rem}.fleet-hero-stats strong{display:block;margin-top:4px;font-size:.76rem;color:#fff;font-variant-numeric:tabular-nums}
+.fleet-radar-graphic{position:relative;width:220px;height:170px;margin:auto;display:grid;place-items:center;color:#8fc1ff}
+.fleet-radar-graphic>i{position:absolute;border:1px solid rgba(130,188,255,.25);border-radius:50%}
+.fleet-radar-graphic>i:nth-child(1){width:72px;height:72px}.fleet-radar-graphic>i:nth-child(2){width:126px;height:126px}.fleet-radar-graphic>i:nth-child(3){width:168px;height:168px}
+.fleet-radar-sweep{position:absolute;width:84px;height:84px;left:50%;top:50%;transform-origin:0 0;background:conic-gradient(from 270deg,rgba(74,153,255,.38),transparent 32%);animation:fleetRadar 4.5s linear infinite}
+.fleet-radar-graphic .fleet-drone-svg{position:relative;z-index:3;width:102px;height:auto;filter:drop-shadow(0 8px 14px rgba(0,0,0,.22))}
+.fleet-radar-graphic>b{position:absolute;right:2px;bottom:8px;padding:5px 8px;border-radius:999px;background:rgba(14,204,155,.14);color:#7ce4c5;font-size:.5rem;letter-spacing:.08em}
+@keyframes fleetRadar{to{transform:rotate(360deg)}}
+
+/* Fleet cards */
+.fleet-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.fleet-aircraft-card{overflow:hidden;border:1px solid #d9e3ef;border-radius:17px;background:#fff;box-shadow:0 9px 26px rgba(16,45,82,.07);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.fleet-aircraft-card:hover{transform:translateY(-2px);border-color:#b9d0ee;box-shadow:0 15px 34px rgba(16,45,82,.11)}
+.fleet-aircraft-card.active{border-top:4px solid var(--fleet-500)}.fleet-aircraft-card.ready{border-top:4px solid #18a57c}.fleet-aircraft-card.maintenance{border-top:4px solid var(--energy-red)}
+.fleet-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px 12px;border-bottom:1px solid #edf1f6}
+.fleet-aircraft-id{display:flex;align-items:center;gap:10px;min-width:0}.fleet-aircraft-id h3{margin:0;color:var(--fleet-950);font-size:.8rem}.fleet-aircraft-id p{margin:3px 0 0;color:var(--slate-500);font-size:.55rem}
+.fleet-mini-icon{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;color:var(--fleet-700);background:var(--fleet-50);border:1px solid var(--fleet-100)}
+.fleet-mini-icon .fleet-drone-svg{width:25px;height:20px}
+.fleet-head-status{display:flex;align-items:flex-end;flex-direction:column;gap:4px}.fleet-head-status small{color:var(--slate-400);font-size:.46rem}
+.fleet-card-main{display:grid;grid-template-columns:120px minmax(0,1.25fr) minmax(145px,.75fr);gap:12px;padding:14px 15px}
+.fleet-visual-column{display:grid;gap:10px;align-content:start}
+.fleet-airframe-stage{position:relative;height:103px;border-radius:14px;display:grid;place-items:center;overflow:hidden;color:var(--fleet-700);background:linear-gradient(145deg,#eff6ff,#e4effd);border:1px solid #d6e6fb}
+.fleet-airframe-stage::before,.fleet-airframe-stage::after{content:"";position:absolute;background:rgba(21,93,190,.11)}
+.fleet-airframe-stage::before{width:1px;height:100%;left:50%}.fleet-airframe-stage::after{height:1px;width:100%;top:50%}
+.airframe-orbit{position:absolute;border:1px dashed rgba(21,93,190,.26);border-radius:50%}.airframe-orbit.one{width:70px;height:70px}.airframe-orbit.two{width:104px;height:104px}
+.fleet-airframe-stage .fleet-drone-svg{position:relative;z-index:2;width:78px;height:58px;filter:drop-shadow(0 8px 10px rgba(21,93,190,.2))}
+.fleet-airframe-stage em{position:absolute;z-index:3;left:8px;bottom:7px;padding:3px 6px;border-radius:6px;background:rgba(255,255,255,.85);color:var(--fleet-700);font-style:normal;font-size:.43rem;font-weight:800}
+.fleet-link-ring{--ring-value:0;position:relative;width:86px;height:86px;margin:auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--fleet-500) calc(var(--ring-value)*1%),#e8eef6 0)}
+.fleet-link-ring::before{content:"";position:absolute;inset:8px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 1px #edf1f6}
+.fleet-link-ring>div{position:relative;z-index:2;text-align:center}.fleet-link-ring strong{display:block;color:var(--fleet-950);font-size:.7rem}.fleet-link-ring span{display:block;margin-top:2px;color:var(--slate-500);font-size:.44rem}
+.fleet-section-label{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.fleet-section-label>span{color:var(--slate-400);font-size:.47rem;font-weight:850;letter-spacing:.09em}.fleet-section-label>b{color:var(--fleet-700);font-size:.47rem}.fleet-section-label>b.warning{color:var(--energy-amber)}.fleet-section-label>b.danger{color:var(--energy-red)}
+.fleet-telemetry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.fleet-telemetry-grid>div{min-width:0;padding:9px 10px;border-radius:10px;background:#f7f9fc;border:1px solid #edf1f6}.fleet-telemetry-grid span,.fleet-health-row span{display:block;color:var(--slate-500);font-size:.48rem}.fleet-telemetry-grid strong{display:block;margin-top:4px;color:var(--slate-900);font-size:.65rem}.fleet-telemetry-grid small{display:block;margin-top:2px;color:var(--slate-400);font-size:.42rem}
+.fleet-location-line{margin-top:7px;padding:8px 10px;border-left:3px solid var(--fleet-500);border-radius:0 8px 8px 0;background:var(--fleet-50)}.fleet-location-line span{display:block;color:var(--slate-500);font-size:.45rem}.fleet-location-line strong{display:block;margin-top:3px;color:var(--fleet-900);font-size:.5rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fleet-readiness-column{padding:10px 11px;border-radius:12px;background:linear-gradient(180deg,#f8fafc,#f4f7fb);border:1px solid #e7edf4}
+.fleet-health-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:9px 0 5px}.fleet-health-row span{display:inline}.fleet-health-row strong{color:var(--slate-800);font-size:.57rem}
+.fleet-health-bar{height:6px;border-radius:99px;overflow:hidden;background:#e4eaf1}.fleet-health-bar i{display:block;height:100%;border-radius:inherit;background:var(--fleet-500)}.fleet-health-bar.warning i{background:var(--energy-amber)}.fleet-health-bar.danger i{background:var(--energy-red)}.fleet-health-bar.energy i{background:#18a57c}
+.fleet-mission-band{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:10px;align-items:center;margin:0 15px 12px;padding:10px 11px;border-radius:12px;border:1px solid #dce8f7;background:linear-gradient(90deg,#f3f8ff,#fbfdff)}
+.fleet-mission-band.empty{border-color:#e5e9ef;background:#fafbfc}.fleet-mission-symbol{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--fleet-700);color:#fff;font-weight:850}.fleet-mission-band.empty .fleet-mission-symbol{background:#e8edf3;color:var(--slate-500)}
+.fleet-mission-copy{min-width:0}.fleet-mission-copy span{display:block;color:var(--fleet-700);font-size:.46rem;font-weight:780}.fleet-mission-copy strong{display:block;margin-top:3px;color:var(--slate-900);font-size:.58rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fleet-mission-copy small{display:block;margin-top:3px;color:var(--slate-500);font-size:.45rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fleet-mission-progress{width:72px;text-align:right}.fleet-mission-progress strong{font-size:.57rem;color:var(--fleet-700)}.fleet-mission-progress>div{height:5px;margin-top:5px;border-radius:99px;background:#dfe8f4;overflow:hidden}.fleet-mission-progress i{display:block;height:100%;background:var(--fleet-500);border-radius:inherit}
+.fleet-card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 15px;border-top:1px solid #edf1f6;background:#fcfdff}.fleet-card-foot>div:first-child{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.fleet-card-foot span{color:var(--slate-400);font-size:.43rem}.fleet-card-foot b{color:var(--slate-700);font-size:.49rem;margin-right:5px}
+
+/* Energy command hero */
+.energy-command-hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:24px;align-items:center;overflow:hidden;margin-bottom:17px;padding:22px 24px;border-radius:18px;background:radial-gradient(circle at 87% 22%,rgba(58,211,179,.24),transparent 31%),linear-gradient(135deg,#053e3a,#075f57 58%,#0a7869);color:#fff;box-shadow:0 16px 34px rgba(5,80,70,.15)}
+.energy-command-hero::before{content:"";position:absolute;width:350px;height:350px;border:1px solid rgba(255,255,255,.07);border-radius:50%;right:-160px;bottom:-250px}
+.energy-hero-copy{position:relative;z-index:2}.energy-hero-copy .asset-eyebrow{color:#82e7cf}.energy-hero-copy h2{margin:8px 0 7px;font-size:1.05rem;letter-spacing:-.025em}.energy-hero-copy p{margin:0;color:#bce4da;font-size:.64rem;line-height:1.6;max-width:700px}
+.energy-hero-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:18px}.energy-hero-stats>div{padding:10px 11px;border:1px solid rgba(255,255,255,.12);border-radius:11px;background:rgba(255,255,255,.07)}.energy-hero-stats span{display:block;color:#a5d4c9;font-size:.5rem}.energy-hero-stats strong{display:block;margin-top:4px;color:#fff;font-size:.76rem;font-variant-numeric:tabular-nums}
+.energy-stack-graphic{position:relative;width:200px;height:160px;margin:auto;display:flex;align-items:flex-end;justify-content:center;gap:11px}
+.energy-stack-graphic>span{position:relative;width:34px;height:104px;border:2px solid rgba(255,255,255,.38);border-radius:7px;background:linear-gradient(to top,#4fd2b3 var(--level),rgba(255,255,255,.06) var(--level));box-shadow:inset 0 0 0 4px rgba(0,0,0,.05)}
+.energy-stack-graphic>span::before{content:"";position:absolute;left:10px;right:10px;top:-7px;height:6px;border-radius:3px 3px 0 0;background:rgba(255,255,255,.5)}
+.energy-stack-graphic>div{position:absolute;top:2px;right:7px;width:66px;color:#7fe2cc}.energy-stack-graphic svg{width:100%;height:auto}.energy-stack-graphic>b{position:absolute;right:5px;bottom:13px;color:#7fe2cc;font-size:.5rem;letter-spacing:.15em}
+
+/* Battery cards */
+.energy-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.energy-battery-card{overflow:hidden;border:1px solid #dbe8e5;border-radius:18px;background:#fff;box-shadow:0 9px 26px rgba(15,75,67,.07);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.energy-battery-card:hover{transform:translateY(-2px);border-color:#b7ddd5;box-shadow:0 15px 34px rgba(15,75,67,.11)}
+.energy-battery-card.active{border-top:4px solid #2e7de9}.energy-battery-card.ready{border-top:4px solid var(--energy-600)}.energy-battery-card.warning{border-top:4px solid var(--energy-amber)}.energy-battery-card.danger{border-top:4px solid var(--energy-red)}
+.energy-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 15px 12px;border-bottom:1px solid #eaf1ef}.energy-card-head>div:first-child{display:flex;align-items:center;gap:10px;min-width:0}.energy-card-head h3{margin:0;color:var(--energy-950);font-size:.8rem}.energy-card-head p{margin:3px 0 0;color:var(--slate-500);font-size:.55rem}
+.energy-id-icon{width:38px;height:34px;display:grid;place-items:center;color:var(--energy-600);background:var(--energy-50);border:1px solid var(--energy-100);border-radius:10px}.energy-id-icon svg{width:27px}
+.energy-decision{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;font-size:.52rem;font-weight:820;white-space:nowrap}.energy-decision::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}.energy-decision.ready{background:#eafaf5;color:#08785f}.energy-decision.active{background:#eef5ff;color:#155dbe}.energy-decision.warning{background:#fff5e7;color:#b55d06}.energy-decision.danger{background:#fff0ef;color:#b42318}
+.energy-card-main{display:grid;grid-template-columns:90px minmax(145px,.65fr) minmax(0,1fr);gap:15px;padding:16px}
+.battery-pack-visual{position:relative;width:72px;height:128px;margin:auto;border:3px solid #315f5a;border-radius:12px;background:#e8efee;overflow:visible;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#073f3a;box-shadow:inset 0 0 0 4px rgba(255,255,255,.5),0 9px 18px rgba(9,76,68,.12)}
+.battery-terminal{position:absolute;top:-10px;left:22px;width:28px;height:9px;border-radius:5px 5px 0 0;background:#315f5a}.battery-pack-fill{position:absolute;left:5px;right:5px;bottom:5px;height:calc(var(--soc)*1% - 10px);max-height:calc(100% - 10px);min-height:0;border-radius:7px;background:linear-gradient(180deg,#52d8b7,#0b937e);transition:height .35s ease}.energy-battery-card.warning .battery-pack-fill,.battery-detail-hero.warning .battery-pack-fill{background:linear-gradient(180deg,#f7c46b,#d97706)}.energy-battery-card.danger .battery-pack-fill,.battery-detail-hero.danger .battery-pack-fill{background:linear-gradient(180deg,#ff8f86,#d92d20)}
+.battery-pack-grid{position:absolute;inset:5px;border-radius:7px;background:repeating-linear-gradient(to bottom,transparent 0 20%,rgba(255,255,255,.28) 20% 21%);pointer-events:none}.battery-pack-visual strong,.battery-pack-visual span{position:relative;z-index:2;text-shadow:0 1px 2px rgba(255,255,255,.7)}.battery-pack-visual strong{font-size:.75rem}.battery-pack-visual span{font-size:.45rem;margin-top:2px;font-weight:800}
+.energy-primary-data{display:grid;align-content:center;justify-items:center;gap:10px;text-align:center}.energy-soh-ring{position:relative;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--energy-600) calc(var(--soh)*1%),#e4efec 0)}.energy-soh-ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}.energy-soh-ring>div{position:relative;z-index:2}.energy-soh-ring strong{display:block;color:var(--energy-950);font-size:.7rem}.energy-soh-ring span{display:block;margin-top:2px;color:var(--slate-500);font-size:.45rem}
+.energy-primary-copy h4{margin:8px 0 4px;color:var(--slate-800);font-size:.59rem;line-height:1.35}.energy-primary-copy p{margin:0;color:var(--slate-500);font-size:.51rem}.energy-primary-copy p strong{color:var(--energy-800)}.energy-primary-copy small{display:block;margin-top:5px;color:var(--slate-400);font-size:.44rem}
+.energy-condition-panel{padding:11px 12px;border-radius:13px;background:linear-gradient(180deg,#f8fbfa,#f3f8f6);border:1px solid #e3eeeb}
+.energy-condition-row{padding:7px 0;border-bottom:1px solid #e3ecea}.energy-condition-row:first-child{padding-top:0}.energy-condition-row>div:first-child{display:flex;align-items:center;justify-content:space-between}.energy-condition-row span,.energy-cycle-row span{color:var(--slate-500);font-size:.48rem}.energy-condition-row strong,.energy-cycle-row strong{color:var(--slate-800);font-size:.57rem}.energy-condition-row small{display:block;margin-top:4px;color:var(--slate-400);font-size:.42rem}
+.temperature-track,.cell-balance-track{position:relative;height:6px;margin-top:7px;border-radius:99px;background:linear-gradient(90deg,#7fc8ed,#74d5af 45%,#f1c66d 75%,#e7786e);overflow:visible}.temperature-track i{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:#fff;border:3px solid #123f63;transform:translate(-50%,-50%);box-shadow:0 2px 5px rgba(0,0,0,.16)}
+.cell-balance-track{overflow:hidden;background:#dfe9e6}.cell-balance-track i{display:block;height:100%;border-radius:inherit;background:var(--energy-600)}.cell-balance-track.warning i{background:var(--energy-amber)}.cell-balance-track.danger i{background:var(--energy-red)}.cell-balance-track b{position:absolute;right:0;top:-2px;width:2px;height:10px;background:#7d8e8a}
+.energy-cycle-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:9px}.energy-cycle-row>div{min-width:0}.energy-cycle-row span,.energy-cycle-row strong{display:block}.energy-cycle-row strong{margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.energy-assignment-band{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 16px 12px;padding:10px 12px;border-radius:12px;border:1px solid #cfe9e2;background:linear-gradient(90deg,#effaf7,#fbfefd)}.energy-assignment-band.empty{border-color:#e4e9ed;background:#fafbfc}.energy-assignment-band span{display:block;color:var(--energy-800);font-size:.46rem;font-weight:800}.energy-assignment-band strong{display:block;margin-top:3px;color:var(--slate-900);font-size:.58rem}.energy-assignment-band small{display:block;margin-top:3px;color:var(--slate-500);font-size:.45rem}.energy-mission-chip{flex:0 0 auto!important;padding:6px 8px;border-radius:999px;background:var(--energy-800);color:#fff!important}
+.energy-card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 15px;border-top:1px solid #eaf1ef;background:#fcfefd}.energy-card-foot>div:first-child{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.energy-card-foot span{color:var(--slate-400);font-size:.43rem}.energy-card-foot b{color:var(--slate-700);font-size:.49rem;margin-right:5px}
+
+/* Battery detail modal */
+.battery-detail-modal{width:min(900px,calc(100vw - 36px));max-height:92vh}.battery-detail-head{background:linear-gradient(135deg,#f7fcfa,#eef8f5)}.battery-detail-title-row{display:flex;align-items:center;gap:11px}.battery-detail-title-row>span{width:44px;height:40px;display:grid;place-items:center;color:var(--energy-600);background:#fff;border:1px solid var(--energy-100);border-radius:11px}.battery-detail-title-row svg{width:31px}.battery-detail-title-row h2{margin:0}.battery-detail-body{display:grid;gap:13px;padding:17px}
+.battery-detail-hero{display:grid;grid-template-columns:105px minmax(0,1fr);gap:18px;align-items:center;padding:17px;border-radius:15px;background:linear-gradient(135deg,#edf9f6,#f8fcfb);border:1px solid #cce8e1}.battery-detail-hero.warning{background:#fff8ed;border-color:#f4d5a1}.battery-detail-hero.danger{background:#fff3f2;border-color:#f0c0bc}.battery-pack-visual.large{width:82px;height:138px}.battery-detail-hero h3{margin:10px 0 5px;color:var(--energy-950);font-size:.86rem}.battery-detail-hero p{margin:0;color:var(--slate-600);font-size:.59rem}
+.battery-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.battery-detail-grid article{overflow:hidden;border:1px solid #e0ebe8;border-radius:13px;background:#fff}.battery-detail-grid header{padding:11px 13px;border-bottom:1px solid #e8f0ee;background:#f8fbfa}.battery-detail-grid header span{display:block;color:var(--energy-600);font-size:.43rem;font-weight:850;letter-spacing:.1em}.battery-detail-grid header h3{margin:3px 0 0;color:var(--energy-950);font-size:.68rem}.battery-detail-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#edf2f1}.battery-detail-metrics>div{min-width:0;padding:10px 12px;background:#fff}.battery-detail-metrics>div.full{grid-column:1/-1}.battery-detail-metrics span{display:block;color:var(--slate-500);font-size:.48rem}.battery-detail-metrics strong{display:block;margin-top:4px;color:var(--slate-800);font-size:.6rem;line-height:1.35;word-break:keep-all}.battery-detail-foot{gap:8px}
+
+@media(max-width:1220px){
+  .fleet-card-grid,.energy-card-grid{grid-template-columns:1fr}
+  .fleet-card-main{grid-template-columns:125px minmax(0,1fr) 190px}
+}
+@media(max-width:900px){
+  .fleet-command-hero,.energy-command-hero{grid-template-columns:1fr}.fleet-radar-graphic,.energy-stack-graphic{display:none}
+  .fleet-hero-stats,.energy-hero-stats{grid-template-columns:repeat(3,1fr)}
+  .fleet-card-main{grid-template-columns:115px minmax(0,1fr)}.fleet-readiness-column{grid-column:1/-1}
+  .energy-card-main{grid-template-columns:90px minmax(0,1fr)}.energy-condition-panel{grid-column:1/-1}
+}
+@media(max-width:620px){
+  .fleet-command-hero,.energy-command-hero{padding:18px}.fleet-hero-stats,.energy-hero-stats{grid-template-columns:repeat(2,1fr)}
+  .fleet-card-main,.energy-card-main{grid-template-columns:1fr}.fleet-visual-column{grid-template-columns:1fr 100px;align-items:center}.fleet-airframe-stage{height:112px}.fleet-readiness-column,.energy-condition-panel{grid-column:auto}
+  .fleet-mission-band{grid-template-columns:30px 1fr}.fleet-mission-progress{grid-column:1/-1;width:100%;text-align:left}.fleet-card-foot,.energy-card-foot{align-items:flex-start;flex-direction:column}.fleet-card-foot .actions,.energy-card-foot .actions{width:100%}.fleet-card-foot .btn,.energy-card-foot .btn{flex:1}
+  .energy-primary-data{grid-template-columns:95px 1fr;text-align:left;justify-items:start}.energy-soh-ring{width:86px;height:86px}.battery-pack-visual{height:118px}
+  .battery-detail-grid{grid-template-columns:1fr}.battery-detail-hero{grid-template-columns:90px 1fr}.battery-detail-modal{width:min(100%,calc(100vw - 20px))}
+}

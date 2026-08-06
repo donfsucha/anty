@@ -1,0 +1,11 @@
+/* Actual map loading and retry status */
+.dlogis-map-tile-status{position:absolute;z-index:1000;top:52px;left:12px;display:flex;align-items:center;gap:7px;max-width:calc(100% - 24px);padding:7px 9px;border:1px solid rgba(183,204,231,.95);border-radius:8px;background:rgba(255,255,255,.96);box-shadow:0 7px 18px rgba(16,24,40,.13);color:#174a8b;font-size:.48rem;pointer-events:auto}
+.dlogis-map-tile-status>span{width:12px;height:12px;flex:0 0 12px;border:2px solid rgba(40,116,232,.22);border-top-color:#2874e8;border-radius:50%;animation:dlogis-map-status-spin .8s linear infinite}
+.dlogis-map-tile-status strong{font-size:.48rem;line-height:1.35}
+.dlogis-map-tile-status.error{border-color:#efc3bf;background:rgba(255,246,245,.97);color:#b42318}
+.dlogis-map-tile-status.error>span{border-color:rgba(217,45,32,.2);border-top-color:#d92d20}
+.dlogis-map-tile-status button{margin-left:3px;padding:5px 7px;border:1px solid #e9aaa4;border-radius:6px;background:#fff;color:#b42318;font-size:.45rem;font-weight:800;cursor:pointer}
+.dlogis-map-tile-status button:hover{background:#fff0ef}
+#ops-inline-live-map.has-map-tiles{background:#dbe6ee}
+@keyframes dlogis-map-status-spin{to{transform:rotate(360deg)}}
+@media(max-width:560px){.dlogis-map-tile-status{top:58px;right:10px;left:10px;justify-content:center}.dlogis-map-tile-status strong{font-size:.5rem}}

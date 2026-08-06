@@ -1,0 +1,10 @@
+/* Derived report and data-quality visuals */
+.live-pill.warning{background:var(--amber-50)!important;border-color:#f1c785!important;color:var(--amber-700)!important}
+.report-quality-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.report-quality-list>div{padding:12px;border:1px solid var(--slate-200);border-radius:10px;background:var(--slate-50)}
+.report-quality-list span{display:block;color:var(--slate-500);font-size:.54rem}
+.report-quality-list strong{display:block;margin-top:5px;color:var(--navy-900);font-size:.7rem}
+.warning-text{color:var(--amber-700)!important}
+.chart-col{position:relative}
+.chart-value{display:block;margin-top:5px;color:var(--navy-900);font-size:.5rem;font-weight:800}
+@media(max-width:620px){.report-quality-list{grid-template-columns:1fr}}

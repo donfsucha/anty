@@ -1,0 +1,50 @@
+/* Compact, visually separated drone quick-status popup */
+.drone-detail-modal{width:min(1080px,calc(100vw - 36px));max-height:92vh;display:flex;flex-direction:column;overflow:hidden}
+.drone-detail-head{align-items:flex-start;flex:0 0 auto;padding:18px 20px;background:#fff}
+.drone-detail-title-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.drone-detail-title-row h2{margin:0;font-size:1.08rem}
+.drone-detail-head p{margin-top:5px!important}
+.drone-detail-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;padding:16px 18px 18px;overflow:auto;background:#f5f8fc}
+.drone-live-strip{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;background:transparent;border:0;border-radius:0;overflow:visible}
+.drone-live-strip>div{min-width:0;min-height:72px;padding:11px 12px;border:1px solid #dce5f0;border-radius:11px;background:#fff;box-shadow:0 3px 9px rgba(16,24,40,.035)}
+.drone-live-strip.stale>div{border-color:#f3d4a3;background:#fffaf2}
+.drone-live-strip span,.drone-detail-item span{display:block;color:var(--slate-500);font-size:.53rem;font-weight:650}
+.drone-live-strip strong{display:block;margin-top:5px;color:var(--navy-900);font-size:.66rem;line-height:1.35;word-break:keep-all}
+.drone-live-strip small{display:block;margin-top:3px;color:var(--slate-500);font-size:.49rem}
+.drone-detail-section{min-width:0;border:1px solid #dce5f0;border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 6px 16px rgba(16,24,40,.045)}
+.drone-detail-section.mission-link-section{grid-column:1/-1}
+.drone-detail-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-bottom:1px solid #e4eaf2;background:linear-gradient(180deg,#fff,#f9fbfd)}
+.drone-section-title{display:flex;align-items:center;gap:10px;min-width:0}
+.section-index{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto;background:#eaf2ff;color:var(--blue-700);font-size:.55rem;font-weight:850}
+.energy-status-section .section-index{background:#eefaf6;color:var(--green-700)}
+.mission-link-section .section-index{background:#f4efff;color:#6d28d9}
+.drone-detail-section-head h3{margin:0;color:var(--navy-900);font-size:.73rem}
+.drone-detail-section-head p{margin:3px 0 0;color:var(--slate-500);font-size:.51rem;line-height:1.35}
+.drone-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:11px;background:#fff}
+.drone-detail-grid.mission-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.drone-detail-item{min-width:0;min-height:69px;padding:10px 11px;border:1px solid #e3e9f1;border-radius:10px;background:#f8fafc}
+.drone-detail-item.full{grid-column:1/-1}
+.drone-detail-item strong{display:block;margin-top:5px;color:var(--slate-900);font-size:.66rem;line-height:1.4;word-break:keep-all}
+.flight-status-section .drone-detail-item{background:#f7faff}
+.energy-status-section .drone-detail-item{background:#f7fbf9}
+.mission-link-section .drone-detail-item{background:#faf9fd}
+.next-work-item{border-color:#c9daf5!important;background:#f2f7ff!important}
+.next-work-item strong{color:var(--blue-700)}
+.mission-link-title{padding:11px 14px;border-bottom:1px solid #e4eaf2;background:#fcfdff}
+.mission-link-title strong{display:block;color:var(--navy-900);font-size:.71rem}
+.mission-link-title span{display:block;margin-top:4px;color:var(--slate-500);font-size:.54rem}
+.drone-detail-empty{padding:20px;color:var(--slate-500);font-size:.62rem;text-align:center}
+.drone-detail-foot{flex:0 0 auto;gap:8px;padding:12px 18px;background:#fff;box-shadow:0 -6px 18px rgba(16,24,40,.04)}
+@media(max-width:900px){
+  .drone-detail-modal{width:min(100%,calc(100vw - 20px));max-height:94vh}
+  .drone-detail-body{grid-template-columns:1fr}
+  .drone-detail-section.mission-link-section,.drone-live-strip{grid-column:auto}
+  .drone-live-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+  .drone-detail-body{padding:12px;gap:10px}
+  .drone-live-strip,.drone-detail-grid,.drone-detail-grid.mission-grid{grid-template-columns:1fr}
+  .drone-detail-item.full{grid-column:auto}
+  .drone-detail-foot{display:grid;grid-template-columns:1fr}
+  .drone-detail-foot .btn{width:100%}
+}

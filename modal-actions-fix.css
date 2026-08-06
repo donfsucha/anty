@@ -1,0 +1,8 @@
+/* Modal buttons: explicit interactive states */
+#modal-root .modal{pointer-events:auto}
+#modal-root .modal button{pointer-events:auto;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,background-color .15s ease,border-color .15s ease}
+#modal-root .modal-foot .btn:not(:disabled):hover,#modal-root .modal-head .btn:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 7px 16px rgba(16,24,40,.10)}
+#modal-root .modal-foot .btn.primary:not(:disabled):hover{box-shadow:0 9px 20px rgba(40,116,232,.24)}
+#modal-root .modal button:active{transform:translateY(0);box-shadow:none}
+#modal-root .modal button:focus-visible{outline:3px solid rgba(40,116,232,.24);outline-offset:2px}
+#modal-root .modal-foot .btn[disabled]{cursor:not-allowed;opacity:.48}

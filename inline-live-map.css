@@ -1,0 +1,45 @@
+/* Inline real map inside the current operational dashboard */
+.ops-map-canvas.is-inline-live{background:#dbe6ee;isolation:isolate}
+.ops-inline-live-map{position:absolute;inset:0;z-index:1;background:#dbe6ee}
+.ops-inline-live-map.leaflet-container{font-family:inherit;background:#dbe6ee}
+.ops-inline-map-loading,.ops-inline-map-error{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:7px;text-align:center;color:#0b1f3a;background:linear-gradient(145deg,#e8f1f6,#d7e5ee)}
+.ops-inline-map-loading>span{width:32px;height:32px;border:3px solid rgba(40,116,232,.18);border-top-color:#2874e8;border-radius:50%;animation:inline-map-spin .8s linear infinite}
+.ops-inline-map-loading strong,.ops-inline-map-error strong{font-size:.67rem}
+.ops-inline-map-loading small,.ops-inline-map-error span{max-width:310px;color:#667085;font-size:.49rem;line-height:1.55}
+.ops-inline-map-error button{border:1px solid #b7cce7;background:#fff;color:#174a8b;border-radius:8px;padding:7px 10px;font-size:.5rem;font-weight:800}
+@keyframes inline-map-spin{to{transform:rotate(360deg)}}
+.ops-inline-map-source{position:absolute;z-index:500;left:12px;top:12px;display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid rgba(255,255,255,.85);border-radius:9px;background:rgba(255,255,255,.94);box-shadow:0 8px 20px rgba(16,24,40,.12);pointer-events:none}
+.ops-inline-map-source strong{color:#0b1f3a;font-size:.52rem}
+.ops-inline-map-source span{color:#667085;font-size:.43rem}
+.ops-inline-map-legend{position:absolute;z-index:500;left:12px;right:12px;bottom:10px;display:flex;gap:9px;flex-wrap:wrap;padding:7px 9px;border-radius:8px;background:rgba(7,27,54,.88);color:#d7e5f4;font-size:.43rem;pointer-events:none}
+.ops-inline-map-legend span{display:inline-flex;align-items:center;gap:5px}
+.ops-inline-map-legend span::before{content:"";width:16px;height:3px;border-radius:99px;background:#0d946c}
+.ops-inline-map-legend .planned::before{background:#2874e8}
+.ops-inline-map-legend .returning::before{background:#d97706}
+.ops-inline-map-legend .restricted::before{background:#d92d20}
+.ops-inline-map-legend .emergency::before{width:8px;height:8px;border:2px solid #0d946c;background:#fff;border-radius:50%}
+.inline-live-div-icon{background:transparent!important;border:0!important}
+.inline-live-drone{position:relative;width:104px;height:76px;display:grid;justify-items:center;align-content:start;pointer-events:auto}
+.inline-live-drone>i{position:relative;z-index:2;width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:#2874e8;color:#fff;border:3px solid #fff;box-shadow:0 8px 20px rgba(16,63,120,.3);font-size:1rem;font-style:normal}
+.inline-live-drone.selected>i{background:#0d946c;box-shadow:0 0 0 7px rgba(13,148,108,.16),0 8px 20px rgba(16,63,120,.3)}
+.inline-live-drone.warning>i{background:#d97706}
+.inline-live-heading{position:absolute;z-index:3;top:-16px;color:#0b315e;font-size:.65rem;transform-origin:center 34px}
+.inline-live-drone>b{margin-top:4px;max-width:104px;padding:3px 6px;border-radius:5px;background:rgba(255,255,255,.96);color:#173d6d;font-size:.47rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 3px 8px rgba(16,24,40,.11)}
+.inline-live-drone>small{margin-top:2px;padding:2px 5px;border-radius:4px;background:rgba(7,27,54,.88);color:#fff;font-size:.42rem;white-space:nowrap}
+.inline-live-popup{min-width:220px;color:#101828}
+.inline-live-popup>strong{display:block;color:#0b1f3a;font-size:.72rem}
+.inline-live-popup>span{display:block;margin-top:4px;color:#667085;font-size:.55rem}
+.inline-live-popup>div{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;margin-top:9px}
+.inline-live-popup>div b{padding:6px;border-radius:6px;background:#f2f4f7;font-size:.5rem;font-weight:750}
+.inline-live-popup>small{display:block;margin-top:8px;color:#667085;font-size:.48rem;font-variant-numeric:tabular-nums}
+.ops-live-flight-card .ops-live-coordinates{padding:9px 12px;border-top:1px solid #eef1f5;border-bottom:1px solid #eef1f5;background:#f4f8ff}
+.ops-live-flight-card .ops-live-coordinates span{display:block;color:#667085;font-size:.43rem}
+.ops-live-flight-card .ops-live-coordinates strong{display:block;margin-top:4px;color:#173d6d;font-size:.51rem;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+.ops-layer-buttons .inline-map-toggle{background:#fff;color:#173d6d;border-color:#fff}
+.ops-layer-buttons .inline-map-toggle.active{background:#0d946c;border-color:#32b58e;color:#fff}
+.ops-map-canvas.is-inline-live .leaflet-control-zoom{margin-top:72px;border:0;box-shadow:0 5px 15px rgba(16,24,40,.15)}
+.ops-map-canvas.is-inline-live .leaflet-control-zoom a{color:#173d6d;border-color:#e4e7ec}
+.ops-map-canvas.is-inline-live .leaflet-control-attribution{font-size:9px;background:rgba(255,255,255,.85)}
+.ops-map-canvas.is-inline-live .leaflet-tooltip{border:1px solid #d0d5dd;border-radius:6px;box-shadow:0 5px 12px rgba(16,24,40,.1);font-size:10px;font-weight:700;color:#344054}
+@media(max-width:900px){.ops-inline-map-source{top:10px;left:10px}.ops-inline-map-legend{left:10px;right:10px}.ops-map-canvas.is-inline-live .leaflet-control-zoom{margin-top:68px}}
+@media(max-width:560px){.ops-inline-map-source{display:grid;gap:2px}.ops-inline-map-legend{gap:6px}.inline-live-drone{transform:scale(.88)}}

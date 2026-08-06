@@ -1,0 +1,70 @@
+/* Mission-only status filters and repeat-from-history workflow */
+.mission-scope-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 13px;padding:10px 12px;border:1px solid var(--slate-200);border-radius:13px;background:#fff;box-shadow:var(--shadow-soft)}
+.mission-scope-tabs{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.mission-scope-tab{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:8px 12px;border:1px solid var(--slate-200);border-radius:10px;background:#fff;color:var(--slate-600);font-size:.68rem;font-weight:780;cursor:pointer;transition:border-color .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease}
+.mission-scope-tab b{min-width:34px;padding:3px 7px;border-radius:999px;background:var(--slate-100);color:var(--slate-600);font-size:.56rem;text-align:center;font-variant-numeric:tabular-nums}
+.mission-scope-tab:hover{border-color:#a8c7f6;background:#f7faff;color:var(--blue-700)}
+.mission-scope-tab.active{border-color:var(--blue-500);background:var(--blue-600);color:#fff;box-shadow:0 6px 14px rgba(40,116,232,.18)}
+.mission-scope-tab.active b{background:rgba(255,255,255,.2);color:#fff}
+.mission-scope-bar>p{max-width:510px;margin:0;color:var(--slate-500);font-size:.58rem;line-height:1.5;text-align:right}
+.mission-status-select{min-width:190px!important}
+.mission-filter-result{white-space:nowrap}
+.mission-repeat-table{min-width:1160px!important}
+.mission-repeat-table tr.is-repeat td:first-child{box-shadow:inset 3px 0 0 #6d4aff}
+.mission-row-progress{width:92px;margin-top:6px}
+.mission-repeat-action{min-width:126px}
+.mission-repeat-btn{border-color:#cfc6ff!important;background:#f5f2ff!important;color:#5338c7!important}
+.mission-repeat-btn:hover{border-color:#8e7af0!important;background:#eee9ff!important;color:#4325ba!important}
+.mission-repeat-btn.primary{border-color:#5b43d6!important;background:#5b43d6!important;color:#fff!important}
+.mission-repeat-chip{display:inline-flex;align-items:center;margin-left:5px;padding:2px 6px;border-radius:999px;background:#f0edff;color:#6246d6;font-size:.49rem;font-weight:820;line-height:1.25;vertical-align:middle;white-space:nowrap}
+.mission-repeat-count{display:block;margin-top:4px;color:var(--slate-500);font-size:.51rem;line-height:1.35}
+.mission-status-badge{max-width:154px;justify-content:center;text-align:center;white-space:normal;line-height:1.25}
+.mission-lineage-banner{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 15px;border-bottom:1px solid #ded8ff;background:linear-gradient(90deg,#f7f5ff,#fbfaff)}
+.mission-lineage-banner>div{min-width:0}
+.mission-lineage-banner span{display:block;color:#6d55d5;font-size:.52rem;font-weight:820;letter-spacing:.04em}
+.mission-lineage-banner strong{display:block;margin-top:4px;color:#2f245f;font-size:.69rem}
+.mission-lineage-banner small{display:block;margin-top:4px;color:var(--slate-500);font-size:.54rem;line-height:1.45;overflow-wrap:anywhere}
+.mission-lineage-banner .btn{flex:0 0 auto}
+.mission-repeat-modal{width:min(820px,100%)}
+.mission-repeat-modal .modal-head p{margin:5px 0 0;color:var(--slate-500);font-size:.68rem}
+.repeat-source-summary{display:grid;grid-template-columns:1.4fr 1fr .7fr;gap:9px}
+.repeat-source-summary>div{min-width:0;padding:12px;border:1px solid var(--slate-200);border-radius:11px;background:var(--slate-50)}
+.repeat-source-summary span{display:block;color:var(--slate-500);font-size:.55rem}
+.repeat-source-summary strong{display:block;margin-top:5px;color:var(--navy-900);font-size:.7rem;line-height:1.4;overflow-wrap:anywhere}
+.repeat-source-summary small{display:block;margin-top:5px;color:var(--slate-500);font-size:.55rem;line-height:1.45;overflow-wrap:anywhere}
+.repeat-copy-info{display:grid;grid-template-columns:135px minmax(0,1fr);gap:7px 12px;margin-top:12px;padding:12px 14px;border:1px solid #d9e5f5;border-radius:11px;background:#f7faff}
+.repeat-copy-info strong{color:var(--navy-900);font-size:.59rem}
+.repeat-copy-info span{color:var(--slate-600);font-size:.58rem;line-height:1.45}
+.repeat-policy{display:grid;gap:8px;margin:14px 0 0;padding:12px;border:1px solid var(--slate-200);border-radius:12px}
+.repeat-policy legend{padding:0 6px;color:var(--navy-900);font-size:.65rem;font-weight:820}
+.repeat-policy-option{display:grid;grid-template-columns:20px minmax(0,1fr);gap:9px;align-items:start;padding:11px;border:1px solid var(--slate-200);border-radius:10px;background:#fff;cursor:pointer}
+.repeat-policy-option:has(input:checked){border-color:#9b8bf0;background:#f7f5ff;box-shadow:0 0 0 3px rgba(109,74,255,.08)}
+.repeat-policy-option:has(input:disabled){opacity:.55;cursor:not-allowed}
+.repeat-policy-option input{margin:2px 0 0;accent-color:#5b43d6}
+.repeat-policy-option strong{display:block;color:var(--navy-900);font-size:.65rem}
+.repeat-policy-option small{display:block;margin-top:4px;color:var(--slate-500);font-size:.55rem;line-height:1.45}
+.repeat-confirm{display:grid;grid-template-columns:20px minmax(0,1fr);gap:9px;align-items:start;margin-top:13px;padding:11px 12px;border:1px solid #b8e7d6;border-radius:10px;background:var(--green-50);color:var(--green-800);font-size:.6rem;font-weight:720;line-height:1.45;cursor:pointer}
+.repeat-confirm input{margin:2px 0 0;accent-color:var(--green-600)}
+@media (max-width:900px){
+  .mission-scope-bar{align-items:flex-start;flex-direction:column}
+  .mission-scope-bar>p{text-align:left}
+  .repeat-source-summary{grid-template-columns:1fr 1fr}
+  .repeat-source-summary>div:first-child{grid-column:1/-1}
+}
+@media (max-width:640px){
+  .mission-scope-bar{padding:9px;margin-bottom:10px}
+  .mission-scope-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:6px}
+  .mission-scope-tab{display:grid;justify-items:center;gap:4px;min-width:0;padding:8px 5px;font-size:.6rem}
+  .mission-scope-tab b{min-width:0;width:100%;padding:2px 4px;font-size:.51rem}
+  .mission-scope-bar>p{font-size:.54rem}
+  .mission-status-select{min-width:0!important}
+  .mission-repeat-table{min-width:0!important}
+  .mission-repeat-table .mission-repeat-action{display:grid!important;grid-template-columns:88px minmax(0,1fr)!important}
+  .mission-repeat-action .mission-repeat-btn{width:100%}
+  .mission-lineage-banner{align-items:flex-start;flex-direction:column;padding:11px}
+  .mission-lineage-banner .btn{width:100%}
+  .repeat-source-summary{grid-template-columns:minmax(0,1fr)}
+  .repeat-source-summary>div:first-child{grid-column:auto}
+  .repeat-copy-info{grid-template-columns:minmax(0,1fr);gap:4px}
+  .repeat-copy-info span+strong{margin-top:7px}
+}

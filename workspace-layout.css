@@ -1,0 +1,136 @@
+/*
+ * D-LOGIS workspace density and master-detail layout
+ * Loaded after responsive-layout.css so every screen uses the available width
+ * without forcing unrelated cards to share the tallest column height.
+ */
+
+.page.layout-optimized{width:100%;max-width:1920px;min-width:0;align-content:start}
+.page.layout-optimized>*{min-width:0}
+.page.layout-optimized>.card,.page.layout-optimized>section{width:100%}
+.page.layout-optimized .grid,.page.layout-optimized .stack{align-content:start}
+.page.layout-optimized .card,.page.layout-optimized .entity{height:auto;min-height:0}
+.page.layout-optimized .dashboard-grid{align-items:start}
+.page.layout-optimized .dashboard-grid>.card,.page.layout-optimized .dashboard-grid>.stack,.page.layout-optimized .dashboard-grid>.stack>.card{height:auto;min-height:0;align-self:start}
+.page.layout-optimized .empty{min-height:0;padding:28px 18px}
+.page.layout-optimized .table-wrap{width:100%;min-width:0}
+.page.layout-optimized .table{width:100%}
+
+/* Dashboard: map and support cards never stretch each other. */
+body[data-app-view="dashboard"] .consistency-banner+.dashboard-grid{align-items:start}
+body[data-app-view="dashboard"] .consistency-banner+.dashboard-grid>.card{height:auto!important}
+body[data-app-view="dashboard"] .consistency-banner+.dashboard-grid>.stack{align-items:start;grid-auto-rows:max-content}
+body[data-app-view="dashboard"] .consistency-banner+.dashboard-grid>.stack>.card{height:auto!important;min-height:0}
+body[data-app-view="dashboard"] .mission-mini:has(.empty),body[data-app-view="dashboard"] .card-body:has(>.empty){padding-block:18px}
+
+/*
+ * Mission management uses a full-width master list followed by a full-width
+ * detail workspace. This removes the large blank left column produced when the
+ * long verification panel was placed beside a short mission list.
+ */
+.mission-workspace{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:15px!important;align-items:start!important;width:100%;min-width:0}
+.mission-list-pane,.mission-detail-pane{position:static!important;top:auto!important;align-self:start!important;width:100%!important;max-width:none!important;min-width:0;height:auto!important}
+.mission-list-pane{overflow:hidden}
+.mission-list-pane .toolbar{position:relative;z-index:4;background:#fff}
+.mission-list-pane .table-wrap{max-height:clamp(270px,36vh,450px);overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain}
+.mission-list-pane .table{min-width:1040px;margin:0}
+.mission-list-pane .table thead th{position:sticky;top:0;z-index:3;background:#f8fafc;box-shadow:0 1px 0 var(--slate-200)}
+.mission-list-pane .table tbody tr:last-child td{border-bottom:0}
+.mission-detail-pane{overflow:visible;scroll-margin-top:calc(var(--top) + 14px)}
+.mission-detail-pane .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mission-detail-pane .detail-item{min-width:0}
+.mission-detail-pane .detail-item strong,.mission-detail-pane .detail-item small{overflow-wrap:anywhere}
+.mission-detail-pane .mission-stage-scroll-v2,.mission-detail-pane .mission-stagebar{scrollbar-width:thin}
+.mission-detail-pane .pf-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.mission-detail-pane .pf-item{min-height:136px;align-items:start;padding:14px}
+.mission-detail-pane .pf-item>.btn{align-self:center}
+.mission-detail-pane .pf-item-main{align-self:start}
+.mission-detail-pane .pf-evidence{white-space:normal;overflow-wrap:anywhere}
+.mission-detail-pane .pf-record-bar{gap:7px}
+.mission-detail-pane .pf-record-bar .btn{margin-left:auto}
+.mission-detail-pane .history-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px;padding-top:10px}
+.mission-detail-pane .history-row{min-width:0;border-bottom:1px solid var(--slate-100)}
+.mission-detail-pane .history-row:nth-last-child(-n+2){border-bottom:0}
+.mission-detail-pane .detail-actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* Other management screens use dense independent grids, never equal-height columns. */
+body[data-app-view="fleet"] .fleet-card-grid,body[data-app-view="batteries"] .energy-card-grid{align-items:start;grid-auto-rows:max-content}
+body[data-app-view="fleet"] .fleet-aircraft-card,body[data-app-view="batteries"] .energy-battery-card{height:auto;align-self:start}
+body[data-app-view="fleet"] .fleet-command-hero,body[data-app-view="batteries"] .energy-command-hero{width:100%}
+body[data-app-view="safety"] .page>.card,body[data-app-view="proofs"] .page>.card,body[data-app-view="reports"] .page>.card,body[data-app-view="connection"] .page>.card{height:auto;min-height:0}
+body[data-app-view="reports"] .dashboard-grid,body[data-app-view="connection"] .dashboard-grid{align-items:start;grid-auto-rows:max-content}
+body[data-app-view="reports"] .dashboard-grid>.card,body[data-app-view="connection"] .dashboard-grid>.card{height:auto!important;align-self:start}
+
+@media (min-width:1600px){
+  .mission-detail-pane .detail-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .mission-detail-pane .pf-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .mission-detail-pane .pf-item{min-height:148px}
+  body[data-app-view="fleet"] .fleet-card-grid,body[data-app-view="batteries"] .energy-card-grid{gap:17px}
+}
+
+@media (min-width:1180px){
+  body[data-app-view="missions"] .page-head{margin-bottom:15px}
+  body[data-app-view="missions"] .flow-overview{margin-bottom:13px}
+  body[data-app-view="missions"] .mission-list-pane .toolbar{padding-top:11px;padding-bottom:11px}
+  body[data-app-view="missions"] .mission-detail-pane>.detail-hero{border-radius:var(--r) var(--r) 0 0}
+
+  /* Wide data and asset screens expand with the browser instead of leaving side gutters. */
+  body[data-app-view="fleet"] .fleet-card-grid,body[data-app-view="batteries"] .energy-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body[data-app-view="proofs"] .page>.card,body[data-app-view="safety"] .page>.card{width:100%}
+}
+
+@media (max-width:1179.98px){
+  .mission-workspace{gap:13px!important}
+  .mission-list-pane .table-wrap{max-height:420px}
+  .mission-detail-pane .detail-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mission-detail-pane .pf-grid{grid-template-columns:minmax(0,1fr)}
+  .mission-detail-pane .pf-item{min-height:0}
+  .mission-detail-pane .history-list{grid-template-columns:minmax(0,1fr)}
+  .mission-detail-pane .history-row{border-bottom:1px solid var(--slate-100)}
+  .mission-detail-pane .history-row:last-child{border-bottom:0}
+}
+
+@media (max-width:640px){
+  .page.layout-optimized{width:100%}
+  .mission-workspace{gap:10px!important}
+  .mission-list-pane{overflow:visible}
+  .mission-list-pane .toolbar{display:grid;grid-template-columns:minmax(0,1fr);gap:9px;padding:11px}
+  .mission-list-pane .filters{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%}
+  .mission-list-pane .filters .input,.mission-list-pane .filters .select{width:100%;min-width:0}
+  .mission-list-pane .toolbar>.muted{justify-self:end}
+  .mission-list-pane .table-wrap{max-height:none;overflow:visible;padding:10px;background:#f7f9fc}
+  .mission-list-pane .mission-table{display:block;min-width:0!important;border-collapse:separate}
+  .mission-list-pane .mission-table thead{display:none}
+  .mission-list-pane .mission-table tbody{display:grid;gap:9px}
+  .mission-list-pane .mission-table tr{display:block;overflow:hidden;border:1px solid var(--slate-200);border-radius:12px;background:#fff;box-shadow:0 3px 10px rgba(16,24,40,.04)}
+  .mission-list-pane .mission-table tr.selected{border-color:#9fc2f6;box-shadow:0 0 0 3px rgba(40,116,232,.09)}
+  .mission-list-pane .mission-table td{display:grid;grid-template-columns:88px minmax(0,1fr);gap:9px;align-items:start;padding:8px 11px;border:0;border-bottom:1px solid var(--slate-100);background:transparent!important;font-size:.67rem}
+  .mission-list-pane .mission-table td:last-child{border-bottom:0}
+  .mission-list-pane .mission-table td::before{content:attr(data-label);color:var(--slate-500);font-size:.58rem;font-weight:760;line-height:1.4}
+  .mission-list-pane .mission-table td>*{min-width:0}
+  .mission-list-pane .mission-table .progress{width:100%!important;max-width:150px}
+
+  .mission-detail-pane .detail-grid{grid-template-columns:minmax(0,1fr)}
+  .mission-detail-pane .detail-actions>.btn{flex:1 1 145px}
+  .mission-detail-pane .pf-shell{padding:14px 11px}
+  .mission-detail-pane .pf-item{grid-template-columns:30px minmax(0,1fr);padding:11px}
+  .mission-detail-pane .pf-item>.btn{grid-column:2;width:100%;margin-top:2px}
+  .mission-detail-pane .pf-item-title{display:block}
+  .mission-detail-pane .pf-status{margin-top:7px}
+  .mission-detail-pane .pf-record-bar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+  .mission-detail-pane .pf-record-bar>span{display:block;min-width:0;overflow-wrap:anywhere}
+  .mission-detail-pane .pf-record-bar .btn{grid-column:1/-1;width:100%;margin-left:0}
+
+  /* Proof tables become vertical records instead of forcing phone users to pan. */
+  body[data-app-view="proofs"] .table-wrap{overflow:visible;padding:10px;background:#f7f9fc}
+  body[data-app-view="proofs"] .responsive-data-table{display:block;min-width:0!important}
+  body[data-app-view="proofs"] .responsive-data-table thead{display:none}
+  body[data-app-view="proofs"] .responsive-data-table tbody{display:grid;gap:9px}
+  body[data-app-view="proofs"] .responsive-data-table tr{display:block;border:1px solid var(--slate-200);border-radius:12px;background:#fff;overflow:hidden}
+  body[data-app-view="proofs"] .responsive-data-table td{display:grid;grid-template-columns:92px minmax(0,1fr);gap:8px;padding:8px 10px;border:0;border-bottom:1px solid var(--slate-100);overflow-wrap:anywhere}
+  body[data-app-view="proofs"] .responsive-data-table td:last-child{border-bottom:0}
+  body[data-app-view="proofs"] .responsive-data-table td::before{content:attr(data-label);color:var(--slate-500);font-size:.58rem;font-weight:760}
+}
+
+@media (max-width:420px){
+  .mission-list-pane .mission-table td,body[data-app-view="proofs"] .responsive-data-table td{grid-template-columns:76px minmax(0,1fr);padding-inline:9px}
+}

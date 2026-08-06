@@ -1,0 +1,58 @@
+/* Integrated operational flight map */
+.ops-map-shell{background:#071b36;color:#fff;min-height:500px}
+.ops-map-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.12);background:linear-gradient(90deg,#071b36,#0d315c)}
+.ops-map-title strong{display:block;font-size:.72rem}
+.ops-map-title span{display:block;margin-top:3px;color:#9fb8d3;font-size:.51rem}
+.ops-layer-buttons{display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.ops-layer-buttons button{border:1px solid rgba(255,255,255,.17);background:rgba(255,255,255,.06);color:#a9bfd6;border-radius:7px;padding:6px 8px;font-size:.48rem;font-weight:750}
+.ops-layer-buttons button.active{background:#2874e8;border-color:#4d91ef;color:#fff}
+.ops-layer-buttons button:last-child{background:#fff;color:#173d6d;border-color:#fff}
+.ops-map-layout{display:grid;grid-template-columns:190px minmax(0,1fr) 260px;min-height:455px}
+.ops-flight-list{border-right:1px solid rgba(255,255,255,.1);background:#0a2444;padding:11px}
+.ops-list-head{display:flex;align-items:center;justify-content:space-between;padding:5px 4px 10px;color:#fff;font-size:.58rem}
+.ops-list-head span{color:#8fb0cf}
+.ops-list-row{width:100%;display:grid;grid-template-columns:8px 1fr auto;gap:8px;align-items:center;border:1px solid transparent;background:transparent;color:#d4e2f1;border-radius:9px;padding:9px 8px;text-align:left;margin-bottom:5px}
+.ops-list-row:hover{background:rgba(255,255,255,.06)}
+.ops-list-row.active{background:rgba(40,116,232,.2);border-color:rgba(82,151,244,.48)}
+.ops-list-row>i{width:7px;height:7px;border-radius:50%;background:#26c79b;box-shadow:0 0 0 4px rgba(38,199,155,.1)}
+.ops-list-row strong{display:block;font-size:.54rem;line-height:1.35}
+.ops-list-row small{display:block;margin-top:3px;color:#88a6c4;font-size:.45rem}
+.ops-list-row>span{color:#fff;font-size:.52rem;font-weight:800}
+.ops-list-empty{padding:18px 4px;color:#7897b6;font-size:.52rem;text-align:center}
+.ops-map-canvas{position:relative;min-width:0;overflow:hidden;background:linear-gradient(145deg,#dceaf2,#e8f1f6 55%,#d9e6ee)}
+.ops-map-canvas::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 28% 67%,rgba(15,99,153,.08),transparent 26%),radial-gradient(circle at 72% 30%,rgba(70,126,83,.08),transparent 30%);pointer-events:none}
+.ops-map-canvas svg{position:absolute;inset:0;width:100%;height:100%}
+.ops-map-corridor{fill:none;stroke:rgba(40,116,232,.13);stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
+.ops-map-planned{fill:none;stroke:#2874e8;stroke-width:.55;stroke-dasharray:1.5 1.2;stroke-linecap:round;stroke-linejoin:round;filter:url(#ops-shadow)}
+.ops-map-planned.returning{stroke:#d97706;stroke-dasharray:2 1}
+.ops-map-flown{fill:none;stroke:#0d946c;stroke-width:.75;stroke-linecap:round;stroke-linejoin:round;filter:url(#ops-shadow)}
+.ops-map-home{fill:#fff;stroke:#0b1f3a;stroke-width:.55}
+.ops-map-destination{fill:#fff;stroke:#0d946c;stroke-width:.65}
+.ops-geofence{fill:rgba(40,116,232,.04);stroke:rgba(40,116,232,.5);stroke-width:.45;stroke-dasharray:1.4 1}
+.ops-restricted{fill:rgba(217,45,32,.12);stroke:rgba(217,45,32,.72);stroke-width:.45;stroke-dasharray:1.2 1}
+.ops-emergency circle{fill:#fff;stroke:#0d946c;stroke-width:.5}.ops-emergency text{font-size:2px;font-weight:900;text-anchor:middle;fill:#0d946c}
+.ops-drone-marker{position:absolute;z-index:8;transform:translate(-50%,-50%);border:0;background:transparent;color:#0b1f3a;display:grid;justify-items:center;min-width:86px;padding:0}
+.ops-drone-marker>i{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#2874e8;color:#fff;font-style:normal;font-size:.92rem;border:3px solid #fff;box-shadow:0 8px 18px rgba(16,63,120,.28)}
+.ops-drone-marker.selected>i{background:#0d946c;box-shadow:0 0 0 6px rgba(13,148,108,.16),0 8px 18px rgba(16,63,120,.28)}
+.ops-drone-marker.warning>i{background:#d97706}
+.ops-heading{position:absolute;top:-17px;color:#0b315e;font-size:.58rem;transform-origin:center 34px}
+.ops-drone-marker b{margin-top:4px;padding:3px 6px;border-radius:5px;background:rgba(255,255,255,.94);color:#173d6d;font-size:.46rem;white-space:nowrap;box-shadow:0 3px 8px rgba(16,24,40,.08)}
+.ops-drone-marker small{margin-top:2px;padding:2px 5px;border-radius:4px;background:rgba(7,27,54,.84);color:#fff;font-size:.42rem;white-space:nowrap}
+.ops-weather{position:absolute;left:12px;top:12px;z-index:5;padding:9px 10px;border:1px solid rgba(255,255,255,.8);border-radius:9px;background:rgba(255,255,255,.92);box-shadow:0 8px 20px rgba(16,24,40,.11)}
+.ops-weather span{display:block;color:#667085;font-size:.44rem}.ops-weather strong{display:block;margin-top:3px;color:#0b1f3a;font-size:.54rem}.ops-weather small{display:block;margin-top:3px;color:#9a6700;font-size:.41rem}
+.ops-map-legend{position:absolute;left:12px;right:12px;bottom:10px;z-index:5;display:flex;gap:9px;flex-wrap:wrap;padding:7px 9px;border-radius:8px;background:rgba(7,27,54,.84);color:#d7e5f4;font-size:.43rem}
+.ops-map-legend span{display:inline-flex;align-items:center;gap:5px}.ops-map-legend span::before{content:"";width:16px;height:3px;border-radius:99px;background:#0d946c}.ops-map-legend .planned::before{background:#2874e8}.ops-map-legend .return::before{background:#d97706}.ops-map-legend .restricted::before{background:#d92d20}.ops-map-legend .emergency::before{width:8px;height:8px;border:2px solid #5ce0b8;background:#fff;border-radius:50%}
+.ops-map-side{border-left:1px solid rgba(255,255,255,.1);background:#0a2444;padding:11px;display:flex;flex-direction:column;gap:9px}
+.ops-flight-card{border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#fff;color:#101828;overflow:hidden}
+.ops-flight-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:11px 12px;border-bottom:1px solid #e8edf3;background:#f8fafc}
+.ops-flight-head span{display:block;color:#667085;font-size:.45rem}.ops-flight-head strong{display:block;margin-top:3px;color:#0b1f3a;font-size:.66rem}.ops-flight-head strong small{color:#667085;font-size:.46rem}
+.ops-flight-mission{padding:10px 12px;border-bottom:1px solid #eef1f5}.ops-flight-mission strong{display:block;font-size:.56rem}.ops-flight-mission span{display:block;margin-top:4px;color:#667085;font-size:.45rem;line-height:1.35}
+.ops-flight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#e9edf2}
+.ops-flight-grid>div{padding:9px 10px;background:#fff}.ops-flight-grid span{display:block;color:#667085;font-size:.42rem}.ops-flight-grid strong{display:block;margin-top:3px;font-size:.54rem;font-variant-numeric:tabular-nums}.ops-flight-grid strong.warn{color:#b42318}
+.ops-flight-footer{display:grid;gap:6px;padding:10px 12px;background:#f8fafc}.ops-flight-footer span{display:flex;justify-content:space-between;gap:8px;color:#667085;font-size:.43rem}.ops-flight-footer b{color:#344054;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px}
+.ops-map-advisory{margin-top:auto;padding:10px;border:1px solid rgba(104,164,230,.25);border-radius:10px;background:rgba(40,116,232,.1)}
+.ops-map-advisory strong{display:block;font-size:.53rem}.ops-map-advisory span{display:block;margin-top:4px;color:#9fbbd7;font-size:.45rem;line-height:1.45}
+.ops-map-empty{display:grid;gap:5px;padding:24px 10px;text-align:center;color:#6b86a2}.ops-map-empty strong{font-size:.58rem}.ops-map-empty span{font-size:.46rem;line-height:1.5}
+@media(max-width:1180px){.ops-map-layout{grid-template-columns:165px minmax(0,1fr) 230px}.ops-layer-buttons button{padding:5px 6px}.ops-map-side{padding:8px}}
+@media(max-width:900px){.ops-map-toolbar{display:block}.ops-layer-buttons{justify-content:flex-start;margin-top:9px}.ops-map-layout{grid-template-columns:1fr}.ops-flight-list{display:flex;overflow:auto;border-right:0;border-bottom:1px solid rgba(255,255,255,.1)}.ops-list-head{min-width:90px}.ops-list-row{min-width:190px;margin:0 5px 0 0}.ops-map-canvas{height:430px}.ops-map-side{border-left:0;border-top:1px solid rgba(255,255,255,.1)}.ops-flight-card{max-width:none}}
+@media(max-width:560px){.ops-layer-buttons{display:grid;grid-template-columns:repeat(3,1fr)}.ops-map-canvas{height:390px}.ops-weather{max-width:210px}.ops-map-legend{gap:6px}.ops-flight-grid{grid-template-columns:1fr 1fr}}

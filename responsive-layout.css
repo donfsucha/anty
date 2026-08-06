@@ -1,0 +1,177 @@
+/*
+ * D-LOGIS two-mode responsive layout
+ * DESKTOP : >= 1180px — fixed navigation, full-width operational map, three compact information panels
+ * COMPACT : < 1180px  — drawer navigation, single-column operational flow, phone-safe controls
+ */
+
+html,body,#app,.shell,.main,.page{min-width:0}
+html,body{max-width:100%;overflow-x:hidden}
+.main{overflow-x:clip}
+.page{width:100%}
+.grid,.dashboard-grid,.stack,.card,.card-body,.ops-map-shell,.ops-map-layout,.ops-map-canvas,.ops-map-side,.ops-flight-list{min-width:0}
+.dashboard-grid{align-items:start}
+.dashboard-grid>.card,.dashboard-grid>.stack,.dashboard-grid>.stack>.card{align-self:start;height:auto}
+.table-wrap{max-width:100%;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+
+/* The dashboard map must never stretch to the combined height of the right-hand cards. */
+.consistency-banner+.dashboard-grid{align-items:start}
+.consistency-banner+.dashboard-grid>.card{height:max-content;align-self:start}
+
+@media (min-width:1180px){
+  :root{--responsive-content-max:1920px}
+  .main{padding:calc(var(--top) + 22px) clamp(22px,2.15vw,42px) 42px}
+  .page{max-width:var(--responsive-content-max)}
+
+  /* Six live KPIs remain on one line on a normal desktop. */
+  .consistency-overview{grid-template-columns:repeat(6,minmax(0,1fr));gap:11px}
+  .flow-overview-item{min-height:74px;padding:13px 14px}
+
+  /* Stable desktop composition: map first, operational cards below. */
+  .consistency-banner+.dashboard-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+  .consistency-banner+.dashboard-grid>.stack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+  .consistency-banner+.dashboard-grid>.stack>.card{width:100%;min-height:0}
+  .consistency-banner+.dashboard-grid>.stack>.card .card-body{max-height:340px;overflow:auto}
+  .consistency-banner+.dashboard-grid>.stack>.card .empty{min-height:88px;display:grid;place-items:center;text-align:center}
+
+  /* The map uses the available desktop width instead of compressing the centre canvas. */
+  .ops-map-shell{min-height:0;border-radius:0 0 var(--r) var(--r);overflow:hidden}
+  .ops-map-layout{grid-template-columns:clamp(170px,13vw,220px) minmax(470px,1fr) clamp(260px,20vw,320px);min-height:0}
+  .ops-flight-list,.ops-map-canvas,.ops-map-side{height:clamp(520px,59vh,720px);min-height:520px}
+  .ops-flight-list,.ops-map-side{overflow:auto;scrollbar-width:thin}
+  .ops-map-canvas{width:100%}
+  .ops-map-side{padding:12px}
+  .ops-map-advisory{margin-top:10px}
+  .ops-layer-buttons{max-width:62%;flex-wrap:wrap}
+
+  /* Other two-column management screens should align at the top, not equalise height. */
+  .split,.entity-grid,.fleet-card-grid,.energy-card-grid{align-items:start}
+  .detail-panel{align-self:start}
+}
+
+@media (max-width:1179.98px){
+  :root{--side:0px;--top:64px}
+  body{background:var(--soft)}
+
+  /* Compact top bar and drawer navigation. */
+  .topbar{height:var(--top);padding:0 12px;gap:10px}
+  .brand{width:auto;min-width:0;flex:1}
+  .brand-title{font-size:.86rem;white-space:nowrap}
+  .brand-sub{font-size:.56rem}
+  .topbar-main{flex:0 0 auto;gap:8px}
+  .topbar-context{gap:7px}
+  .menu-btn{display:grid;place-items:center;flex:0 0 40px}
+  .sidebar{top:var(--top);bottom:0;width:min(320px,86vw);padding:15px 12px 18px;transform:translateX(-104%);transition:transform .22s ease,box-shadow .22s ease;box-shadow:none;z-index:180}
+  .sidebar.open{transform:translateX(0);box-shadow:20px 0 55px rgba(6,22,45,.24)}
+  .main{margin-left:0;padding:calc(var(--top) + 16px) clamp(12px,2.5vw,24px) 36px}
+  .page{max-width:none;margin:0}
+
+  .page-head{align-items:flex-start;margin-bottom:15px}
+  .page-head .actions{justify-content:flex-start}
+  .consistency-overview,.flow-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .consistency-banner{grid-template-columns:1fr;gap:10px;padding:11px 12px}
+  .consistency-counts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));justify-content:stretch;gap:7px}
+  .consistency-counts span{justify-content:space-between;min-width:0}
+
+  /* Compact mode is a single, predictable reading order. */
+  .consistency-banner+.dashboard-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+  .consistency-banner+.dashboard-grid>.stack{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+  .consistency-banner+.dashboard-grid>.stack>.card .card-body{max-height:none;overflow:visible}
+
+  .ops-map-shell{min-height:0}
+  .ops-map-toolbar{display:block;padding:11px 12px}
+  .ops-map-title span{line-height:1.45}
+  .ops-layer-buttons{display:flex;flex-wrap:nowrap;justify-content:flex-start;gap:6px;margin-top:10px;overflow-x:auto;padding:0 0 3px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+  .ops-layer-buttons button{flex:0 0 auto;min-height:32px;padding:7px 10px;font-size:.52rem}
+  .ops-map-layout{display:grid;grid-template-columns:minmax(0,1fr);min-height:0}
+  .ops-flight-list{display:flex;align-items:stretch;gap:6px;overflow-x:auto;overflow-y:hidden;padding:10px;border-right:0;border-bottom:1px solid rgba(255,255,255,.1);-webkit-overflow-scrolling:touch}
+  .ops-list-head{flex:0 0 92px;min-width:92px;align-content:center;padding:6px}
+  .ops-list-row{flex:0 0 min(230px,72vw);min-width:0;margin:0;padding:9px 10px}
+  .ops-map-canvas{height:clamp(390px,61vh,560px);min-height:390px}
+  .ops-map-side{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(210px,.72fr);gap:10px;padding:10px;border-left:0;border-top:1px solid rgba(255,255,255,.1)}
+  .ops-map-advisory{margin:0;align-self:stretch}
+  .ops-flight-card{min-width:0}
+  .ops-map-legend,.ops-inline-map-legend{left:10px;right:10px;max-width:calc(100% - 20px);flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+  .ops-map-legend::-webkit-scrollbar,.ops-inline-map-legend::-webkit-scrollbar{display:none}
+  .ops-inline-map-source{left:10px;top:10px;max-width:calc(100% - 72px)}
+  .ops-map-canvas.is-inline-live .leaflet-control-zoom{margin-top:74px}
+
+  /* Long workflow screens become one column and retain horizontal table scrolling. */
+  .split{grid-template-columns:minmax(0,1fr)}
+  .detail-panel{position:static;top:auto}
+  .fleet-command-hero,.energy-command-hero{grid-template-columns:minmax(0,1fr);padding:20px}
+  .fleet-radar-graphic,.energy-stack-graphic{display:none}
+  .fleet-card-grid,.energy-card-grid{grid-template-columns:minmax(0,1fr)}
+  .fleet-card-main{grid-template-columns:120px minmax(0,1fr) minmax(150px,.72fr)}
+  .modal{max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px)}
+}
+
+@media (max-width:640px){
+  :root{--top:58px}
+  .topbar{padding:0 9px}
+  .brand{gap:8px}
+  .brand .brand-symbol{width:34px;height:34px;flex:0 0 34px}
+  .brand-title{font-size:.77rem}
+  .brand-sub{display:none}
+  .topbar-context>div{display:none}
+  .top-actions{gap:5px}
+  .live-pill{width:34px;height:34px;justify-content:center;padding:0}
+  .live-pill span{display:none}
+  .mode-pill{display:none}
+  .avatar-btn{padding:3px;border-radius:10px}
+  .avatar{width:30px;height:30px}
+  .avatar-copy{display:none}
+  .main{padding:calc(var(--top) + 12px) 10px 28px}
+
+  .page-head{display:block;margin-bottom:13px}
+  .page-head h1{font-size:1.34rem}
+  .page-head p{font-size:.72rem;line-height:1.45}
+  .page-head .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;margin-top:12px}
+  .page-head .actions .btn{width:100%;min-width:0;padding-left:9px;padding-right:9px}
+  .flow-overview-item{min-height:68px;padding:11px 12px}
+  .flow-overview-item strong{font-size:1rem}
+  .consistency-banner{margin-bottom:11px;border-radius:11px}
+  .consistency-counts{grid-template-columns:minmax(0,1fr)}
+
+  .card,.kpi,.entity{border-radius:13px}
+  .card-head{padding:13px 14px}
+  .card-body{padding:14px}
+  .card-head h2,.card-head h3{font-size:.86rem}
+
+  .ops-map-toolbar{padding:10px}
+  .ops-layer-buttons{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));overflow:visible}
+  .ops-layer-buttons button{width:100%;min-width:0;padding:7px 5px;white-space:nowrap}
+  .ops-flight-list{gap:6px;padding:8px}
+  .ops-list-head{display:none}
+  .ops-list-row{flex-basis:78vw}
+  .ops-map-canvas{height:clamp(360px,56vh,470px);min-height:360px}
+  .ops-map-side{grid-template-columns:minmax(0,1fr);padding:8px}
+  .ops-map-advisory{display:none}
+  .ops-weather{left:9px;top:9px;max-width:220px}
+  .ops-inline-map-source{display:grid;gap:2px;padding:7px 8px}
+  .ops-inline-map-source span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ops-map-canvas.is-inline-live .leaflet-control-zoom{margin-top:70px;margin-left:8px}
+  .inline-live-drone{transform:scale(.86)}
+  .ops-flight-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+  .mini-row{grid-template-columns:34px minmax(0,1fr);align-items:start}
+  .mini-row>.status{grid-column:2;justify-self:start}
+  .alert-row{grid-template-columns:8px minmax(0,1fr)}
+  .alert-row>.btn,.alert-row>.status{grid-column:2;justify-self:start}
+  .fleet-hero-stats,.energy-hero-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fleet-card-main{grid-template-columns:minmax(0,1fr);padding:12px}
+  .fleet-visual-column{grid-template-columns:120px minmax(0,1fr);align-items:center}
+  .fleet-mission-band{grid-template-columns:32px minmax(0,1fr);margin:0 12px 10px}
+  .fleet-mission-progress{grid-column:2;width:100%;text-align:left}
+  .energy-battery-card{min-width:0}
+
+  .modal-backdrop{padding:0;align-items:end}
+  .modal{width:100%;max-width:100%;max-height:94dvh;border-radius:18px 18px 0 0}
+  .modal-head,.modal-body,.modal-foot{padding-left:14px;padding-right:14px}
+  .form-grid{grid-template-columns:minmax(0,1fr)}
+  .field.full{grid-column:auto}
+  .toast-root,#toast-root{left:10px;right:10px;bottom:10px;width:auto}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .sidebar,.drone-marker,.operation-spinner,.ops-inline-map-loading>span{transition:none!important;animation:none!important}
+}

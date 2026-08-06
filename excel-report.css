@@ -1,0 +1,8 @@
+/* Professional Excel export controls */
+[data-export-workbook],[data-export-csv],[data-export-preflight-xlsx]{white-space:nowrap}
+[data-export-workbook]:not(:disabled),[data-export-csv]:not(:disabled),[data-export-preflight-xlsx]:not(:disabled){border-color:#b8cff5;background:#f4f8ff;color:#174a8b}
+[data-export-workbook]:not(:disabled):hover,[data-export-csv]:not(:disabled):hover,[data-export-preflight-xlsx]:not(:disabled):hover{border-color:#2874e8;background:#eaf2ff;color:#155bcc}
+.excel-exporting{position:relative;padding-left:34px!important;opacity:.85}
+.excel-exporting::before{content:"";position:absolute;left:13px;width:12px;height:12px;border:2px solid rgba(40,116,232,.25);border-top-color:#2874e8;border-radius:50%;animation:dlogisExcelSpin .8s linear infinite}
+@keyframes dlogisExcelSpin{to{transform:rotate(360deg)}}
+@media(max-width:640px){[data-export-workbook],[data-export-csv],[data-export-preflight-xlsx]{width:100%;justify-content:center}}
