@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.2.1-visible-mission-controls';
+const CACHE_NAME = 'dlogis-control-v3.2.2-mission-map-sync';
 const ASSETS = [
   './',
   './index.html',
@@ -51,6 +51,7 @@ const ASSETS = [
   './notification-lifecycle.js',
   './interaction-stability.js',
   './mission-repeat.js',
+  './mission-map-sync.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
