@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.1.5-map-resilience';
+const CACHE_NAME = 'dlogis-control-v3.2.0-mission-repeat';
 const ASSETS = [
   './',
   './index.html',
@@ -19,6 +19,7 @@ const ASSETS = [
   './responsive-layout.css',
   './workspace-layout.css',
   './notification-lifecycle.css',
+  './mission-repeat.css',
   './core.js',
   './views.js',
   './app.js',
@@ -48,6 +49,7 @@ const ASSETS = [
   './stable-report-controls.js',
   './notification-lifecycle.js',
   './interaction-stability.js',
+  './mission-repeat.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
