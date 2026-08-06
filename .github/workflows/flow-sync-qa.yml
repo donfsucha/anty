@@ -19,7 +19,7 @@ jobs:
       - name: JavaScript syntax
         run: |
           set -e
-          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js mission-repeat.js mission-map-sync.js service-worker.js; do
+          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js mission-repeat.js mission-map-sync.js maintenance-clearance.js service-worker.js; do
             node --check "$file"
           done
 
@@ -33,7 +33,7 @@ jobs:
           missing = [ref for ref in refs if not Path(ref).exists()]
           if missing:
               raise SystemExit(f'Missing referenced files: {missing}')
-          required = ['design-tokens.css','system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','map-resilience.js','inline-live-map.js','excel-report.js','agency-report.js','unified-report-mode.js','stable-report-controls.js','layout-optimizer.js','report-observer-guard.js','report-observer-release.js','button-stability.js','notification-lifecycle.js','interaction-stability.js','mission-repeat.js','mission-map-sync.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','map-resilience.css','excel-report.css','agency-report.css','responsive-layout.css','workspace-layout.css','notification-lifecycle.css','mission-repeat.css','drone-detail-ux.css']
+          required = ['design-tokens.css','system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','map-resilience.js','inline-live-map.js','excel-report.js','agency-report.js','unified-report-mode.js','stable-report-controls.js','layout-optimizer.js','report-observer-guard.js','report-observer-release.js','button-stability.js','notification-lifecycle.js','interaction-stability.js','mission-repeat.js','mission-map-sync.js','maintenance-clearance.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','map-resilience.css','excel-report.css','agency-report.css','responsive-layout.css','workspace-layout.css','notification-lifecycle.css','mission-repeat.css','maintenance-clearance.css','drone-detail-ux.css','tests/maintenance-clearance-smoke.mjs']
           missing_required = [name for name in required if not Path(name).exists()]
           if missing_required:
               raise SystemExit(f'Missing QA files: {missing_required}')
@@ -66,6 +66,13 @@ jobs:
           grep -q "data-track-mission" mission-map-sync.js
           grep -q "dlogis:mission-map-sync" mission-map-sync.js
           grep -q "active mission-to-map synchronization smoke test" tests/mission-map-sync-smoke.mjs
+          grep -q "PERIODIC AIRCRAFT CLEARANCE" maintenance-clearance.js
+          grep -q "validityFlightHours" maintenance-clearance.js
+          grep -q "QUICK_DISPATCH_SIGNOFF" maintenance-clearance.js
+          grep -q "data-open-quick-dispatch" maintenance-clearance.js
+          grep -q "긴급복귀 실행 후 기체 재점검 필요" maintenance-clearance.js
+          grep -q "mc-board" maintenance-clearance.css
+          grep -q "one-screen quick dispatch smoke test" tests/maintenance-clearance-smoke.mjs
           grep -q "ExcelJS" excel-report.js
           grep -q "기관보고서 Excel" agency-report.js
           grep -q "01_임무별_종합" agency-report.js
