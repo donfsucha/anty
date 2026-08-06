@@ -46,7 +46,8 @@ const prepared=await page.evaluate(()=>{
   drone.status='READY';drone.missionId=mission.id;drone.batteryId=battery.id;
   battery.status='READY';battery.droneId=drone.id;
   state.selectedMission=mission.id;state.flowUi.inlineMapMode='live';state.flowUi.selectedMapDroneId=null;
-  persist();render();
+  /* The mounted map is updated by the existing telemetry loop; do not replace its DOM node. */
+  persist();
   return {missionId:mission.id,droneId:drone.id,droneName:drone.name};
 });
 
