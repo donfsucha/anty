@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.1.2-notification-lifecycle';
+const CACHE_NAME = 'dlogis-control-v3.1.3-interaction-stability';
 const ASSETS = [
   './',
   './index.html',
@@ -44,6 +44,7 @@ const ASSETS = [
   './button-stability.js',
   './unified-report-mode.js',
   './notification-lifecycle.js',
+  './interaction-stability.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
