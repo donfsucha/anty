@@ -1,8 +1,9 @@
-const CACHE_NAME = 'dlogis-control-v3.2.0-mission-repeat';
+const CACHE_NAME = 'dlogis-control-v3.2.1-visible-mission-controls';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
+  './design-tokens.css',
   './flow-sync.css',
   './stagebar-ux.css',
   './system-consistency.css',
