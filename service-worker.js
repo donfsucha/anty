@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.9.0-workspace-density';
+const CACHE_NAME = 'dlogis-control-v3.0.0-agency-reports';
 const ASSETS = [
   './',
   './index.html',
@@ -14,6 +14,7 @@ const ASSETS = [
   './operations-map.css',
   './inline-live-map.css',
   './excel-report.css',
+  './agency-report.css',
   './responsive-layout.css',
   './workspace-layout.css',
   './core.js',
@@ -36,6 +37,7 @@ const ASSETS = [
   './modal-actions-fix.js',
   './excel-report.js',
   './layout-optimizer.js',
+  './agency-report.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
