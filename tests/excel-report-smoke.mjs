@@ -12,7 +12,7 @@ await page.goto('http://127.0.0.1:5500',{waitUntil:'networkidle'});
 await page.locator('[data-enter-role="admin"]').click();
 await page.getByText('통합관제 대시보드',{exact:true}).waitFor();
 await page.locator('.sidebar [data-view="missions"]').click();
-await page.getByText('배송임무 관리',{exact:true}).waitFor();
+await page.getByRole('heading',{name:'배송임무 관리'}).waitFor();
 
 const agencyButton=page.locator('[data-agency-report="agency"]').first();
 await agencyButton.waitFor();
@@ -54,13 +54,13 @@ if(!missionSheet.includes('<pane'))throw new Error('Frozen panes are missing fro
 if(!missionSheet.includes('<autoFilter'))throw new Error('Auto filter is missing from the mission sheet.');
 
 await page.locator('.sidebar [data-view="proofs"]').click();
-await page.getByText('배송 완료 증빙',{exact:true}).waitFor();
+await page.getByRole('heading',{name:'배송 완료 증빙'}).waitFor();
 const proofButton=page.locator('[data-agency-report="proofs"]').first();
 await proofButton.waitFor();
 if(!(await proofButton.innerText()).includes('배송증빙 Excel'))throw new Error('Proof CSV button was not converted to 배송증빙 Excel.');
 
 await page.locator('.sidebar [data-view="reports"]').click();
-await page.getByText('운영리포트',{exact:true}).waitFor();
+await page.getByRole('heading',{name:'운영리포트'}).waitFor();
 const reportButton=page.locator('[data-agency-report="operations"]').first();
 await reportButton.waitFor();
 if(!(await reportButton.innerText()).includes('운영리포트 Excel'))throw new Error('Report CSV button was not converted to 운영리포트 Excel.');
