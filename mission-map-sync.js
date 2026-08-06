@@ -9,7 +9,7 @@
  * one final canonical snapshot and a direct "track on map" action.
  */
 (function installMissionMapSynchronization(){
-  const VERSION='1.0.0';
+  const VERSION='1.0.1';
   const MAP_ACTIVE_STATUSES=new Set(['IN_FLIGHT','HOLDING','DELIVERED','RETURNING','LANDING']);
   const MAP_ACTIONS=new Set(['START','HOLD','RESUME','RTH','DELIVER','COMPLETE']);
   const STATUS_TO_DRONE={IN_FLIGHT:'IN_FLIGHT',HOLDING:'HOLDING',DELIVERED:'RETURNING',RETURNING:'RETURNING',LANDING:'LANDING'};
@@ -113,7 +113,6 @@
     if(isMapActive(mission)){
       ensureActiveLink(mission);
       chooseSelectedDrone(mission);
-      if(action==='START')ui.inlineMapMode='live';
     }else chooseSelectedDrone();
     ui.lastMapSyncAt=typeof flowNow==='function'?flowNow():new Date().toISOString();
     ui.lastMapSyncMissionId=mission?.id||null;
