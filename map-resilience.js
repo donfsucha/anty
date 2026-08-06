@@ -6,11 +6,10 @@
  * The inline Leaflet map must remain stable when the dashboard changes between
  * schematic and actual-map modes, when an active mission is added, and when the
  * user moves to another page. The guard supplies a deterministic empty-state
- * view, normalizes OSM tile requests and cancels map/canvas callbacks before a
- * mounted map is removed.
+ * view, normalizes OSM tile requests and cancels map callbacks before removal.
  */
 (function installMapResilience(){
-  const VERSION='1.2.0';
+  const VERSION='1.2.1';
   const MAP_CONTAINER_ID='ops-inline-live-map';
   const DEFAULT_CENTER=[37.5032,126.7652];
   const DEFAULT_ZOOM=13;
@@ -39,9 +38,7 @@
     const renderers=new Set();
     if(map?._renderer)renderers.add(map._renderer);
     Object.values(map?._paneRenderers||{}).forEach(renderer=>renderer&&renderers.add(renderer));
-    Object.values(map?._layers||{}).forEach(layer=>{
-      if(layer?._renderer)renderers.add(layer._renderer);
-    });
+    Object.values(map?._layers||{}).forEach(layer=>{if(layer?._renderer)renderers.add(layer._renderer);});
     return [...renderers];
   }
 
@@ -88,12 +85,9 @@
       stopMapAnimations(map);
       if(api.lastMap===map){api.lastMap=null;api.lastTileLayer=null;}
       try{return originalRemove();}catch(error){
-        /* A detached dashboard container is already visually removed. */
         if(!map._container?.isConnected)return map;
         throw error;
-      }finally{
-        cancelRendererDraws(map);
-      }
+      }finally{cancelRendererDraws(map);}
     };
     return map;
   }
@@ -107,9 +101,7 @@
     });
   }
 
-  function removeStatus(map){
-    map?._container?.querySelector('.dlogis-map-tile-status')?.remove();
-  }
+  function removeStatus(map){map?._container?.querySelector('.dlogis-map-tile-status')?.remove();}
 
   function showStatus(map,message,tone='loading'){
     if(!isInlineMap(map)||map.__dlogisRemoved||!map._container?.isConnected)return;
@@ -145,18 +137,12 @@
     layer.on('tileload',event=>{
       const map=event.target?._map;
       if(!isInlineMap(map)||map.__dlogisRemoved||!map._container?.isConnected)return;
-      errorCount=0;
-      clearTimeout(timeoutId);
-      map._container.classList.add('has-map-tiles');
-      removeStatus(map);
+      errorCount=0;clearTimeout(timeoutId);map._container.classList.add('has-map-tiles');removeStatus(map);
     });
     layer.on('load',event=>{
       const map=event.target?._map;
       if(!isInlineMap(map)||map.__dlogisRemoved||!map._container?.isConnected)return;
-      errorCount=0;
-      clearTimeout(timeoutId);
-      map._container.classList.add('has-map-tiles');
-      removeStatus(map);
+      errorCount=0;clearTimeout(timeoutId);map._container.classList.add('has-map-tiles');removeStatus(map);
     });
     layer.on('tileerror',event=>{
       const map=event.target?._map;
@@ -176,6 +162,7 @@
       if(isInlineTarget(args[0])){
         args[1]={
           ...(args[1]||{}),
+          preferCanvas:false,
           zoomAnimation:false,
           fadeAnimation:false,
           markerZoomAnimation:false,
@@ -214,24 +201,15 @@
     if(window.L){patchLeaflet(window.L);return;}
     const descriptor=Object.getOwnPropertyDescriptor(window,'L');
     if(descriptor&&!descriptor.configurable){
-      const timer=setInterval(()=>{
-        if(!window.L)return;
-        clearInterval(timer);patchLeaflet(window.L);
-      },50);
+      const timer=setInterval(()=>{if(window.L){clearInterval(timer);patchLeaflet(window.L);}},50);
       setTimeout(()=>clearInterval(timer),15000);
       return;
     }
-
     let leafletValue;
     Object.defineProperty(window,'L',{
-      configurable:true,
-      enumerable:true,
+      configurable:true,enumerable:true,
       get(){return leafletValue;},
-      set(value){
-        leafletValue=value;
-        patchLeaflet(value);
-        Object.defineProperty(window,'L',{configurable:true,enumerable:true,writable:true,value});
-      }
+      set(value){leafletValue=value;patchLeaflet(value);Object.defineProperty(window,'L',{configurable:true,enumerable:true,writable:true,value});}
     });
   }
 
@@ -241,8 +219,7 @@
     event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
     const map=api.lastMap;const layer=api.lastTileLayer;
     if(!map||!layer||map.__dlogisRemoved)return;
-    showStatus(map,'실제 지도 다시 연결 중');
-    ensureDefaultView(map);
+    showStatus(map,'실제 지도 다시 연결 중');ensureDefaultView(map);
     try{layer.redraw();}catch{}
   },true);
 
