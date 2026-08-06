@@ -6,11 +6,11 @@
  * The inline Leaflet map must remain stable when the dashboard changes between
  * schematic and actual-map modes, when an active mission is added, and when the
  * user moves to another page. The guard supplies a deterministic empty-state
- * view, normalizes OSM tile requests and disables map animations that can keep
- * callbacks alive after the map container has been replaced.
+ * view, normalizes OSM tile requests and cancels map/canvas callbacks before a
+ * mounted map is removed.
  */
 (function installMapResilience(){
-  const VERSION='1.1.0';
+  const VERSION='1.2.0';
   const MAP_CONTAINER_ID='ops-inline-live-map';
   const DEFAULT_CENTER=[37.5032,126.7652];
   const DEFAULT_ZOOM=13;
@@ -35,6 +35,26 @@
     return Boolean(map._loaded&&center&&Number.isFinite(center.lat)&&Number.isFinite(center.lng)&&Number.isFinite(zoom));
   }
 
+  function mapRenderers(map){
+    const renderers=new Set();
+    if(map?._renderer)renderers.add(map._renderer);
+    Object.values(map?._paneRenderers||{}).forEach(renderer=>renderer&&renderers.add(renderer));
+    Object.values(map?._layers||{}).forEach(layer=>{
+      if(layer?._renderer)renderers.add(layer._renderer);
+    });
+    return [...renderers];
+  }
+
+  function cancelRendererDraws(map){
+    mapRenderers(map).forEach(renderer=>{
+      try{
+        if(renderer._redrawRequest){cancelAnimationFrame(renderer._redrawRequest);renderer._redrawRequest=null;}
+        if(renderer._animRequest){cancelAnimationFrame(renderer._animRequest);renderer._animRequest=null;}
+        renderer._redrawBounds=null;
+      }catch{}
+    });
+  }
+
   function stopMapAnimations(map){
     if(!map)return;
     try{map.stop?.();}catch{}
@@ -43,6 +63,7 @@
       if(map._flyToFrame){cancelAnimationFrame(map._flyToFrame);map._flyToFrame=null;}
       if(map._resizeRequest){cancelAnimationFrame(map._resizeRequest);map._resizeRequest=null;}
     }catch{}
+    cancelRendererDraws(map);
     map._animatingZoom=false;
     map._zoomAnimated=false;
   }
@@ -70,6 +91,8 @@
         /* A detached dashboard container is already visually removed. */
         if(!map._container?.isConnected)return map;
         throw error;
+      }finally{
+        cancelRendererDraws(map);
       }
     };
     return map;
@@ -225,6 +248,7 @@
 
   api.ensureDefaultView=ensureDefaultView;
   api.stopMapAnimations=stopMapAnimations;
+  api.cancelRendererDraws=cancelRendererDraws;
   api.makeInlineLifecycleSafe=makeInlineLifecycleSafe;
   api.patchLeaflet=patchLeaflet;
   window.dlogisMapResilience=api;
