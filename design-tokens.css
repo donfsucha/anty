@@ -1,0 +1,87 @@
+/*
+ * Canonical D-LOGIS design-token aliases.
+ *
+ * The original interface uses compact tokens such as --blue and --line, while
+ * later operational modules use scale tokens such as --blue-600 and
+ * --slate-200. Keeping both names mapped to the same palette prevents invalid
+ * CSS declarations and invisible active-control text.
+ */
+:root{
+  --navy-900:var(--navy,#0b1f3a);
+  --navy-800:var(--navy2,#173d6d);
+
+  --blue-50:var(--blue50,#eff6ff);
+  --blue-100:#dbeafe;
+  --blue-400:#60a5fa;
+  --blue-500:var(--blue,#2874e8);
+  --blue-600:var(--blue2,#1d5fd1);
+  --blue-700:#174a8b;
+
+  --green-50:var(--green50,#eefbf5);
+  --green-600:var(--green,#0d946c);
+  --green-700:#087454;
+  --green-800:#065f46;
+
+  --amber-50:var(--amber50,#fffbeb);
+  --amber-600:var(--amber,#d97706);
+  --amber-700:#b45309;
+
+  --red-50:var(--red50,#fff4f3);
+  --red-600:var(--red,#d92d20);
+  --red-700:#b42318;
+
+  --slate-50:var(--soft,#f7f9fc);
+  --slate-100:#f2f4f7;
+  --slate-200:var(--line,#e4eaf2);
+  --slate-300:#d0d5dd;
+  --slate-400:#98a2b3;
+  --slate-500:var(--muted,#667085);
+  --slate-600:var(--text,#475467);
+  --slate-700:#344054;
+  --slate-900:var(--ink,#101828);
+
+  --shadow-soft:var(--shadow,0 1px 2px #1018280a,0 10px 28px #1e365b14);
+}
+
+/* Mission range tabs always expose a readable label and count. */
+.mission-scope-tab{
+  color:var(--slate-600,#475467);
+  background:#fff;
+  border-color:var(--slate-200,#e4eaf2);
+}
+.mission-scope-tab>span,
+.mission-scope-tab>b{
+  display:block;
+  opacity:1;
+  visibility:visible;
+  text-indent:0;
+}
+.mission-scope-tab>span{
+  color:inherit;
+  font-weight:800;
+  white-space:nowrap;
+}
+.mission-scope-tab>b{
+  color:var(--slate-600,#475467);
+  background:var(--slate-100,#f2f4f7);
+}
+.mission-scope-tab.active,
+.mission-scope-tab[aria-selected="true"]{
+  color:#fff;
+  background:var(--blue-600,#1d5fd1);
+  border-color:var(--blue-500,#2874e8);
+}
+.mission-scope-tab.active>span,
+.mission-scope-tab[aria-selected="true"]>span,
+.mission-scope-tab.active>b,
+.mission-scope-tab[aria-selected="true"]>b{
+  color:#fff;
+}
+.mission-scope-tab.active>b,
+.mission-scope-tab[aria-selected="true"]>b{
+  background:rgba(255,255,255,.2);
+}
+.mission-scope-tab:focus-visible{
+  outline:3px solid rgba(40,116,232,.25);
+  outline-offset:2px;
+}
