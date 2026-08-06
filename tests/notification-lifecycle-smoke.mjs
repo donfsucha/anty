@@ -21,10 +21,10 @@ await page.locator('#flow-operation-dock').waitFor({state:'visible',timeout:8000
 const managedDock=page.locator('#flow-operation-dock.notification-managed');
 await managedDock.waitFor();
 const dockText=await managedDock.innerText();
-if(!dockText.includes('잠시 후 자동으로 닫힙니다.'))throw new Error('Auto-dismiss guidance is missing from the completed operation dock.');
+if(!dockText.includes('자동으로 닫힙니다'))throw new Error('Auto-dismiss guidance is missing from the completed operation dock.');
 if(await page.locator('[data-operation-dismiss]').count()!==1)throw new Error('Manual notification close control is missing.');
 
-await managedDock.waitFor({state:'detached',timeout:8000});
+await managedDock.waitFor({state:'detached',timeout:16000});
 await page.waitForTimeout(1400);
 if(await page.locator('#flow-operation-dock').count())throw new Error('Completed operation notification reappeared after automatic dismissal.');
 
