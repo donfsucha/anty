@@ -19,7 +19,7 @@ jobs:
       - name: JavaScript syntax
         run: |
           set -e
-          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js service-worker.js; do
+          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js service-worker.js; do
             node --check "$file"
           done
 
@@ -33,7 +33,7 @@ jobs:
           missing = [ref for ref in refs if not Path(ref).exists()]
           if missing:
               raise SystemExit(f'Missing referenced files: {missing}')
-          required = ['system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','inline-live-map.js','excel-report.js','agency-report.js','unified-report-mode.js','stable-report-controls.js','layout-optimizer.js','report-observer-guard.js','report-observer-release.js','button-stability.js','notification-lifecycle.js','interaction-stability.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','excel-report.css','agency-report.css','responsive-layout.css','workspace-layout.css','notification-lifecycle.css','drone-detail-ux.css']
+          required = ['system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','map-resilience.js','inline-live-map.js','excel-report.js','agency-report.js','unified-report-mode.js','stable-report-controls.js','layout-optimizer.js','report-observer-guard.js','report-observer-release.js','button-stability.js','notification-lifecycle.js','interaction-stability.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','map-resilience.css','excel-report.css','agency-report.css','responsive-layout.css','workspace-layout.css','notification-lifecycle.css','drone-detail-ux.css']
           missing_required = [name for name in required if not Path(name).exists()]
           if missing_required:
               raise SystemExit(f'Missing QA files: {missing_required}')
@@ -55,6 +55,12 @@ jobs:
           grep -q "APPROVAL_REFERENCE" preflight-verification.js
           grep -q "ops-map-planned" operations-map.js
           grep -q "항로 편차" operations-map.js
+          grep -q "DEFAULT_CENTER=\[37.5032,126.7652\]" map-resilience.js
+          grep -q "https://tile.openstreetmap.org/{z}/{x}/{y}.png" map-resilience.js
+          grep -q "ensureDefaultView" map-resilience.js
+          grep -q "data-map-tile-retry" map-resilience.js
+          grep -q "dlogis-map-tile-status" map-resilience.css
+          grep -q "active and empty mission states" tests/inline-map-smoke.mjs
           grep -q "inline-live-map" inline-live-map.js
           grep -q "ExcelJS" excel-report.js
           grep -q "기관보고서 Excel" agency-report.js
