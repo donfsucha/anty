@@ -6,6 +6,47 @@ const errors=[];
 page.on('pageerror',error=>errors.push(`pageerror: ${error.message}`));
 page.on('console',message=>{if(message.type()==='error')errors.push(`console: ${message.text()}`);});
 
+async function scopeVisuals(){
+  return page.locator('[data-mission-scope]').evaluateAll(buttons=>buttons.map(button=>{
+    const label=button.querySelector('span');
+    const count=button.querySelector('b');
+    const buttonStyle=getComputedStyle(button);
+    const labelStyle=label?getComputedStyle(label):null;
+    const countStyle=count?getComputedStyle(count):null;
+    return {
+      code:button.dataset.missionScope,
+      label:label?.textContent?.trim()||'',
+      count:count?.textContent?.trim()||'',
+      selected:button.getAttribute('aria-selected'),
+      buttonColor:buttonStyle.color,
+      backgroundColor:buttonStyle.backgroundColor,
+      labelColor:labelStyle?.color||'',
+      labelDisplay:labelStyle?.display||'',
+      labelVisibility:labelStyle?.visibility||'',
+      labelOpacity:labelStyle?.opacity||'',
+      countColor:countStyle?.color||'',
+      countDisplay:countStyle?.display||'',
+      countVisibility:countStyle?.visibility||'',
+      countOpacity:countStyle?.opacity||'',
+      width:button.getBoundingClientRect().width,
+      height:button.getBoundingClientRect().height
+    };
+  }));
+}
+
+function assertScopeLabels(visuals,context){
+  const expected={ALL:'전체 임무',ACTIVE:'진행·대기',ARCHIVE:'완료 이력'};
+  for(const item of visuals){
+    if(item.label!==expected[item.code])throw new Error(`${context} scope label mismatch: ${item.code}=${item.label}`);
+    if(!item.count.includes('건'))throw new Error(`${context} scope count is missing: ${item.code}`);
+    if(item.width<70||item.height<30)throw new Error(`${context} scope control has no usable size: ${item.code}`);
+    if(item.labelDisplay==='none'||item.labelVisibility==='hidden'||Number(item.labelOpacity)===0)throw new Error(`${context} scope label is hidden: ${item.code}`);
+    if(item.countDisplay==='none'||item.countVisibility==='hidden'||Number(item.countOpacity)===0)throw new Error(`${context} scope count is hidden: ${item.code}`);
+    if(item.labelColor===item.backgroundColor)throw new Error(`${context} scope label has no contrast: ${item.code}`);
+    if(item.countColor===item.backgroundColor)throw new Error(`${context} scope count has no contrast: ${item.code}`);
+  }
+}
+
 await page.goto('http://127.0.0.1:5500',{waitUntil:'networkidle'});
 await page.locator('[data-enter-role="admin"]').click();
 await page.getByRole('heading',{name:'통합관제 대시보드'}).waitFor();
@@ -25,6 +66,22 @@ for(const label of ['승인 대기','승인 완료·출동 준비','배송 운�
 
 const scopeButtons=page.locator('[data-mission-scope]');
 if(await scopeButtons.count()!==3)throw new Error('Expected 전체 임무, 진행·대기, 완료 이력 scope tabs.');
+assertScopeLabels(await scopeVisuals(),'Desktop');
+
+/* The selected middle tab previously rendered white text on a white background. */
+await page.locator('[data-mission-scope="ACTIVE"]').click();
+await page.locator('[data-mission-scope="ACTIVE"][aria-selected="true"]').waitFor();
+const activeVisual=(await scopeVisuals()).find(item=>item.code==='ACTIVE');
+if(!activeVisual)throw new Error('Active mission scope visual was not found.');
+if(activeVisual.backgroundColor==='rgba(0, 0, 0, 0)'||activeVisual.backgroundColor==='rgb(255, 255, 255)')throw new Error('Selected 진행·대기 tab has no visible active background.');
+if(activeVisual.labelColor===activeVisual.backgroundColor||activeVisual.countColor===activeVisual.backgroundColor)throw new Error('Selected 진행·대기 tab text is invisible.');
+
+await page.setViewportSize({width:390,height:844});
+await page.waitForTimeout(120);
+assertScopeLabels(await scopeVisuals(),'Phone');
+await page.setViewportSize({width:1680,height:1050});
+await page.waitForTimeout(120);
+
 await page.locator('[data-mission-scope="ARCHIVE"]').click();
 await page.locator('[data-mission-scope="ARCHIVE"][aria-selected="true"]').waitFor();
 
@@ -78,5 +135,5 @@ const newRowText=await page.locator(`tr[data-select-mission="${result.repeated.i
 if(!newRowText.includes('재수행 2회차')||!newRowText.includes('승인 대기'))throw new Error('Repeat lineage or mission status is not visible in the mission list.');
 
 if(errors.length)throw new Error(errors.join('\n'));
-console.log('D-LOGIS ordered mission status and repeat-from-history smoke test passed.');
+console.log('D-LOGIS visible mission tabs, ordered status and repeat-from-history smoke test passed.');
 await browser.close();
