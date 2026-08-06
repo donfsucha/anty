@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.3.0-periodic-clearance';
+const CACHE_NAME = 'dlogis-control-v3.3.1-periodic-clearance-view';
 const ASSETS = [
   './',
   './index.html',
@@ -54,6 +54,7 @@ const ASSETS = [
   './mission-repeat.js',
   './mission-map-sync.js',
   './maintenance-clearance.js',
+  './maintenance-view-integration.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
