@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.0.0-agency-reports';
+const CACHE_NAME = 'dlogis-control-v3.0.1-button-stability';
 const ASSETS = [
   './',
   './index.html',
@@ -37,7 +37,10 @@ const ASSETS = [
   './modal-actions-fix.js',
   './excel-report.js',
   './layout-optimizer.js',
+  './report-observer-guard.js',
   './agency-report.js',
+  './report-observer-release.js',
+  './button-stability.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
