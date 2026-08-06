@@ -1,0 +1,8 @@
+/* Unified document export buttons */
+.agency-report-btn{border-color:#b9d1f3;background:#f5f9ff;color:#174a8b}
+.agency-report-btn:hover{border-color:#2874e8;background:#eaf2ff;color:#155bcc}
+.agency-report-btn.primary{background:#155bcc;border-color:#155bcc;color:#fff}
+.agency-report-btn[disabled]{opacity:.55;cursor:wait;transform:none;box-shadow:none}
+.document-format-note{display:flex;align-items:flex-start;gap:9px;margin:10px 0 0;padding:10px 11px;border:1px solid #d7e5f6;border-radius:10px;background:#f6faff;color:#174a8b;font-size:.58rem;line-height:1.5}
+.document-format-note b{white-space:nowrap}
+@media(max-width:640px){.agency-report-btn{width:100%;justify-content:center}.document-format-note{display:block}}
