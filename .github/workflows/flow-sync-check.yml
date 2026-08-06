@@ -19,14 +19,14 @@ jobs:
       - name: JavaScript syntax check
         run: |
           set -e
-          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js mission-repeat.js service-worker.js tests/flow-smoke.mjs tests/inline-map-smoke.mjs tests/excel-report-smoke.mjs tests/responsive-layout-smoke.mjs tests/workspace-layout-smoke.mjs tests/button-stability-smoke.mjs tests/notification-lifecycle-smoke.mjs tests/interaction-stability-smoke.mjs tests/mission-repeat-smoke.mjs; do
+          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js mission-repeat.js mission-map-sync.js service-worker.js tests/flow-smoke.mjs tests/inline-map-smoke.mjs tests/excel-report-smoke.mjs tests/responsive-layout-smoke.mjs tests/workspace-layout-smoke.mjs tests/button-stability-smoke.mjs tests/notification-lifecycle-smoke.mjs tests/interaction-stability-smoke.mjs tests/mission-repeat-smoke.mjs tests/mission-map-sync-smoke.mjs; do
             node --check "$file"
           done
 
       - name: Required file check
         run: |
           set -e
-          for file in index.html flow-sync.css stagebar-ux.css system-consistency.css data-quality.css drone-detail-ux.css asset-visuals.css preflight-verification.css operations-map.css inline-live-map.css map-resilience.css excel-report.css agency-report.css responsive-layout.css workspace-layout.css notification-lifecycle.css mission-repeat.css system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js mission-repeat.js; do
+          for file in index.html flow-sync.css stagebar-ux.css system-consistency.css data-quality.css drone-detail-ux.css asset-visuals.css preflight-verification.css operations-map.css inline-live-map.css map-resilience.css excel-report.css agency-report.css responsive-layout.css workspace-layout.css notification-lifecycle.css mission-repeat.css system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js mission-repeat.js mission-map-sync.js; do
             test -f "$file"
           done
           grep -q 'system-consistency.js' index.html
@@ -48,6 +48,7 @@ jobs:
           grep -q 'notification-lifecycle.js' index.html
           grep -q 'interaction-stability.js' index.html
           grep -q 'mission-repeat.js' index.html
+          grep -q 'mission-map-sync.js' index.html
           grep -q 'notification-lifecycle.css' index.html
           grep -q 'mission-repeat.css' index.html
           grep -q 'responsive-layout.css' index.html
@@ -79,3 +80,4 @@ jobs:
           node tests/notification-lifecycle-smoke.mjs
           node tests/interaction-stability-smoke.mjs
           node tests/mission-repeat-smoke.mjs
+          node tests/mission-map-sync-smoke.mjs
