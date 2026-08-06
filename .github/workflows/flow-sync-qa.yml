@@ -68,7 +68,7 @@ jobs:
           grep -q "mission-workspace" workspace-layout.css
           grep -q "grid-template-columns:minmax(0,1fr)!important" workspace-layout.css
           grep -q "mission-table thead{display:none}" workspace-layout.css
-          grep -q "data-app-view" layout-optimizer.js
+          grep -q "dataset.appView" layout-optimizer.js
           grep -q "labelTable" layout-optimizer.js
           grep -q "fleet-command-hero" asset-visuals.css
           grep -q "energy-command-hero" asset-visuals.css
