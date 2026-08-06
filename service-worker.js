@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.1.4-stable-controls';
+const CACHE_NAME = 'dlogis-control-v3.1.5-map-resilience';
 const ASSETS = [
   './',
   './index.html',
@@ -13,6 +13,7 @@ const ASSETS = [
   './preflight-verification.css',
   './operations-map.css',
   './inline-live-map.css',
+  './map-resilience.css',
   './excel-report.css',
   './agency-report.css',
   './responsive-layout.css',
@@ -32,6 +33,7 @@ const ASSETS = [
   './asset-visuals.js',
   './preflight-verification.js',
   './operations-map.js',
+  './map-resilience.js',
   './inline-live-map.js',
   './flow-sync-events.js',
   './drone-detail-ux.js',
