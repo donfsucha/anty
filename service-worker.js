@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.2.2-mission-map-sync';
+const CACHE_NAME = 'dlogis-control-v3.3.0-periodic-clearance';
 const ASSETS = [
   './',
   './index.html',
@@ -21,6 +21,7 @@ const ASSETS = [
   './workspace-layout.css',
   './notification-lifecycle.css',
   './mission-repeat.css',
+  './maintenance-clearance.css',
   './core.js',
   './views.js',
   './app.js',
@@ -52,6 +53,7 @@ const ASSETS = [
   './interaction-stability.js',
   './mission-repeat.js',
   './mission-map-sync.js',
+  './maintenance-clearance.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
