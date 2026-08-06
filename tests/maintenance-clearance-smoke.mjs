@@ -33,7 +33,7 @@ const inspectionText=await page.locator('#mc-inspection-form').innerText();
 for(const text of ['점검자 성명','정비기록 번호','기체 구조·외관·프로펠러','모터·ESC·구동계','실제 점검했으며']){
   if(!inspectionText.includes(text))throw new Error(`Periodic inspection modal is missing: ${text}`);
 }
-await page.locator('#mc-inspection-form [data-modal-close]').click();
+await page.locator('.mc-inspection-modal [data-modal-close]').first().click();
 await page.locator('#mc-inspection-form').waitFor({state:'detached'});
 
 // An approved and assigned mission should use the one-screen quick dispatch flow.
@@ -60,7 +60,7 @@ for(const text of ['정기 기체점검','배터리 BMS','통신·GNSS','실측 
 }
 const autoPass=await page.evaluate(id=>window.dlogisMaintenanceClearance.automaticReadiness(flowMission(id)).automaticPass,missionId);
 if(!autoPass)throw new Error('Automatic dispatch criteria did not pass for the selected simulation mission.');
-await page.locator('#mc-quick-dispatch-form input[type="checkbox"]').check();
+for(const checkbox of await page.locator('#mc-quick-dispatch-form input[type="checkbox"]').all())await checkbox.check();
 await page.locator('[data-quick-dispatch-action="READY"]').click();
 await page.waitForFunction(id=>Boolean(flowMission(id)?.quickDispatch&&window.flowPreflightReady?.(flowMission(id))),missionId,{timeout:10000});
 await page.locator('.mc-dispatch-panel.ready').waitFor();
