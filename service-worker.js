@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v3.1.1-unified-report-cleanup';
+const CACHE_NAME = 'dlogis-control-v3.1.2-notification-lifecycle';
 const ASSETS = [
   './',
   './index.html',
@@ -17,6 +17,7 @@ const ASSETS = [
   './agency-report.css',
   './responsive-layout.css',
   './workspace-layout.css',
+  './notification-lifecycle.css',
   './core.js',
   './views.js',
   './app.js',
@@ -42,6 +43,7 @@ const ASSETS = [
   './report-observer-release.js',
   './button-stability.js',
   './unified-report-mode.js',
+  './notification-lifecycle.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
