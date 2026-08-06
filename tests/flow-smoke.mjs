@@ -63,7 +63,7 @@ const readyRow=page.locator('tr[data-select-mission="MSN-260726-003"]');
 await readyRow.click();
 await page.locator('[data-mission-action="APPROVE"]').click();
 await waitOperation();
-await page.locator('.detail-panel').getByText('승인 완료·출동 준비',{exact:true}).waitFor();
+await page.locator('.detail-panel .mission-status-badge[data-mission-status-code="APPROVED"]').waitFor();
 await page.locator('[data-auto-assign="MSN-260726-003"]').click();
 await waitOperation();
 await page.locator('.pf-shell').waitFor();
@@ -121,7 +121,7 @@ await startButton.waitFor();
 if(await startButton.isDisabled())throw new Error('Start remained disabled after verified sign-off.');
 await startButton.click();
 await waitOperation(18000);
-await page.locator('.detail-panel').getByText('배송 운항',{exact:true}).waitFor();
+await page.locator('.detail-panel .mission-status-badge[data-mission-status-code="IN_FLIGHT"]').waitFor();
 
 /* Re-check dashboard counts and enriched map after the state transition. */
 await openNav('dashboard','통합관제 대시보드');
