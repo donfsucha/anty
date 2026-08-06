@@ -6,17 +6,17 @@
  * All CSV/proof/operations/agency export buttons are removed from other screens.
  */
 (function installUnifiedReportMode(){
-  const VERSION='1.0.0';
+  const VERSION='1.0.1';
   const LABEL='종합보고서 Excel';
   const XLSX_MIME='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-  const REPORT_SELECTOR=[
+  const LEGACY_REPORT_SELECTOR=[
     '[data-export-csv]',
     '[data-export-workbook]',
     '[data-export-proof]',
     '[data-export-report]',
-    '[data-agency-report]',
-    '[data-unified-report]'
+    '[data-agency-report]'
   ].join(',');
+  const REPORT_SELECTOR=`${LEGACY_REPORT_SELECTOR},[data-unified-report]`;
   let scheduled=false;
   let exporting=false;
 
@@ -99,14 +99,22 @@
     }
   }
 
-  function removeReportButtons(){
-    document.querySelectorAll(REPORT_SELECTOR).forEach(button=>button.remove());
+  function isReportsView(){
+    return typeof state!=='undefined'&&state.role==='admin'&&state.view==='reports';
+  }
+
+  function isNormalized(){
+    const legacyCount=document.querySelectorAll(LEGACY_REPORT_SELECTOR).length;
+    const unified=[...document.querySelectorAll('[data-unified-report]')];
+    if(!isReportsView())return legacyCount===0&&unified.length===0;
+    return legacyCount===0&&unified.length===1&&unified[0].textContent.includes(LABEL);
   }
 
   function normalizeReportButtons(){
     scheduled=false;
-    removeReportButtons();
-    if(typeof state==='undefined'||state.role!=='admin'||state.view!=='reports')return;
+    if(isNormalized())return;
+    document.querySelectorAll(REPORT_SELECTOR).forEach(button=>button.remove());
+    if(!isReportsView())return;
     const actions=document.querySelector('.page-head .actions')||document.querySelector('.page-head');
     if(!actions)return;
     const button=document.createElement('button');
@@ -140,6 +148,11 @@
     event.stopImmediatePropagation();
     exportUnifiedReport();
   },true);
+
+  if(typeof MutationObserver==='function'){
+    const observer=new MutationObserver(scheduleNormalize);
+    observer.observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
+  }
 
   window.dlogisUnifiedReportMode={version:VERSION,normalizeReportButtons,exportUnifiedReport};
   scheduleNormalize();
