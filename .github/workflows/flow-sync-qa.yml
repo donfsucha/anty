@@ -19,7 +19,7 @@ jobs:
       - name: JavaScript syntax
         run: |
           set -e
-          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js service-worker.js; do
+          for file in core.js views.js app.js flow-sync-core.js stage-sequence-fix.js flow-sync-views.js stagebar-ux.js system-consistency.js data-quality.js precision-runtime.js view-alias-fix.js asset-visuals.js preflight-verification.js operations-map.js map-resilience.js inline-live-map.js flow-sync-events.js drone-detail-ux.js modal-actions-fix.js excel-report.js agency-report.js unified-report-mode.js stable-report-controls.js layout-optimizer.js report-observer-guard.js report-observer-release.js button-stability.js notification-lifecycle.js interaction-stability.js mission-repeat.js service-worker.js; do
             node --check "$file"
           done
 
@@ -33,14 +33,14 @@ jobs:
           missing = [ref for ref in refs if not Path(ref).exists()]
           if missing:
               raise SystemExit(f'Missing referenced files: {missing}')
-          required = ['system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','map-resilience.js','inline-live-map.js','excel-report.js','agency-report.js','unified-report-mode.js','stable-report-controls.js','layout-optimizer.js','report-observer-guard.js','report-observer-release.js','button-stability.js','notification-lifecycle.js','interaction-stability.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','map-resilience.css','excel-report.css','agency-report.css','responsive-layout.css','workspace-layout.css','notification-lifecycle.css','drone-detail-ux.css']
+          required = ['system-consistency.js','data-quality.js','precision-runtime.js','view-alias-fix.js','asset-visuals.js','preflight-verification.js','operations-map.js','map-resilience.js','inline-live-map.js','excel-report.js','agency-report.js','unified-report-mode.js','stable-report-controls.js','layout-optimizer.js','report-observer-guard.js','report-observer-release.js','button-stability.js','notification-lifecycle.js','interaction-stability.js','mission-repeat.js','drone-detail-ux.js','system-consistency.css','data-quality.css','asset-visuals.css','preflight-verification.css','operations-map.css','inline-live-map.css','map-resilience.css','excel-report.css','agency-report.css','responsive-layout.css','workspace-layout.css','notification-lifecycle.css','mission-repeat.css','drone-detail-ux.css']
           missing_required = [name for name in required if not Path(name).exists()]
           if missing_required:
               raise SystemExit(f'Missing QA files: {missing_required}')
           print('Static references OK')
           PY
 
-      - name: Consistency, verification, map, Excel, layout and stability rules
+      - name: Consistency, verification, map, Excel, layout, mission history and stability rules
         run: |
           grep -q "flowOperationalSnapshot" system-consistency.js
           grep -q "운항 중 드론" system-consistency.js
@@ -79,6 +79,14 @@ jobs:
           grep -q "yyyy-mm-dd hh:mm:ss" agency-report.js
           grep -q "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" agency-report.js
           grep -q "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" unified-report-mode.js
+          grep -q "MISSION_STATUS_GROUPS" mission-repeat.js
+          grep -q "승인 완료·출동 준비" mission-repeat.js
+          grep -q "repeatOfMissionId" mission-repeat.js
+          grep -q "rootMissionId" mission-repeat.js
+          grep -q "PREFER_PREVIOUS" mission-repeat.js
+          grep -q "원본 수행기록은 변경하지 않고" mission-repeat.js
+          grep -q "mission-repeat-chip" mission-repeat.css
+          grep -q "ordered mission status and repeat-from-history smoke test" tests/mission-repeat-smoke.mjs
           grep -q "isDocumentWideButtonObserver" report-observer-guard.js
           grep -q "__dlogisNativeMutationObserver" report-observer-release.js
           grep -q "button:not(\[type\])" button-stability.js
