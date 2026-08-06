@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dlogis-control-v2.8.0-two-mode-responsive';
+const CACHE_NAME = 'dlogis-control-v2.9.0-workspace-density';
 const ASSETS = [
   './',
   './index.html',
@@ -15,6 +15,7 @@ const ASSETS = [
   './inline-live-map.css',
   './excel-report.css',
   './responsive-layout.css',
+  './workspace-layout.css',
   './core.js',
   './views.js',
   './app.js',
@@ -34,6 +35,7 @@ const ASSETS = [
   './drone-detail-ux.js',
   './modal-actions-fix.js',
   './excel-report.js',
+  './layout-optimizer.js',
   './manifest.webmanifest',
   './app-icon.svg'
 ];
